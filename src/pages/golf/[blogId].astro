@@ -1,38 +1,11 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
-import Animation from '../components/Animation.astro';
-
-// blog
-import { getNublog } from "../../library/microcms";
-const resnublog = await getNublog({ fields: ["id", "title", "image", "date"] });
-
-import moment from "moment";
-let setdate = function (str:any) {
-  return moment(str).utc().format('YYYY-MM-DD');
-};
-
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
 ---
 
 <Layout title="N sports">
 	<main>
 		<h1>N sports</h1>
-		<Animation />
-		<div>
-			<ul class="tw-flex tw-flex-wrap tw-gap-[10px] tw-mr-[-10px] sm:tw-gap-[20px] sm:tw-mr-[0px]">
-				{
-					resnublog.contents.map((content: any) => (
-					<Card
-						directory="nu-blog"
-						href={content.link}
-						title={content.title}
-						image={content.image.url}
-						data={setdate(content.date)}
-					/>
-					))
-				}
-			</ul>
-		</div>		
 	</main>
 </Layout>
 
