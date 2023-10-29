@@ -1,41 +1,322 @@
 <canvas id="renderCanvas"></canvas>
 
 <script is:inline src="https://preview.babylonjs.com/babylon.js"></script>
+<script is:inline src="https://cdn.babylonjs.com/materialsLibrary/babylon.gridMaterial.js"></script>
 <script is:inline src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+<script is:inline src="https://unpkg.com/earcut@latest/dist/earcut.min.js"></script>
 <script type="text/javascript">
-	function main() {
-	const canvas = document.getElementById('renderCanvas');
-	const engine = new BABYLON.Engine(canvas);
-	// ここから
-	function createScene() {
-		// シーンを作成
-		const scene = new BABYLON.Scene(engine);
-		// カメラを作成
-		const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0), scene);
-		// カメラがユーザからの入力で動くように
-		camera.attachControl(canvas, true);
-		// ライトを作成
-		const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 10, 0), scene);
-		// 箱 (豆腐) を作成
-		const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
-		// 円柱を作成
-		const cylinder = new BABYLON.MeshBuilder.CreateCylinder("cylinder", {});
-		cylinder.position.x = 1.5;
+      function main() {
+        const canvas = document.getElementById('renderCanvas');
+        const engine = new BABYLON.Engine(canvas);
 
-		return scene;
-	}
-	
-	const scene = createScene();
-	
-	engine.runRenderLoop(() => {
-		scene.render();
-	});
-	
-	window.addEventListener('resize', () => {
-		engine.resize();
-	});
-	}
-	window.addEventListener('DOMContentLoaded', main);
+        function degree(degrees) {
+          return degrees * (Math.PI / 180);
+        }
+
+        const TARGET_BOOTH_ID = "A1";
+
+        const createScene = function () {
+          const scene = new BABYLON.Scene(engine);
+
+          const camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, BABYLON.Vector3.Zero(), scene);
+          camera.position = new BABYLON.Vector3(200, 100, 150);
+          camera.setTarget(new BABYLON.Vector3(160/2, 0, 46/2));
+          camera.attachControl(canvas, true);
+          camera.wheelDeltaPercentage = 0.005;
+
+          const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+          light.intensity = 0.8;
+
+          // 空
+          const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
+          const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+                skyboxMaterial.backFaceCulling = false;
+
+                skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("https://raw.githubusercontent.com/uemura5683/babylonjs/main/apartment/textures/skybox", scene);
+                skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+
+                skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+                skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+                skybox.material = skyboxMaterial;
+            
+          // グランド
+          const groundMat = new BABYLON.StandardMaterial("groundMat");
+          groundMat.diffuseTexture = new BABYLON.Texture("https://raw.githubusercontent.com/uemura5683/babylonjs/main/apartment/textures/ground/villagegreen.png");
+          groundMat.diffuseTexture.hasAlpha = true;
+
+          const ground = BABYLON.MeshBuilder.CreateGround("ground", {width:200, height:100});
+          ground.material = groundMat;
+          ground.rotation.y = degree(180);
+          ground.position.x = 50;
+          ground.position.y = 0;
+          ground.position.z = 44;
+
+          const wallMaterial = new BABYLON.StandardMaterial("wallMaterial", scene);
+          wallMaterial.diffuseColor = new BABYLON.Color3(.5, .5, 1);
+          wallMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+          wallMaterial.emissiveColor = new BABYLON.Color3(.5, .5, .5);
+          wallMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+          wallMaterial.alpha = .9;
+
+          const doorMaterial = new BABYLON.StandardMaterial("doorMaterial", scene);
+          doorMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0);
+          doorMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+          doorMaterial.emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+          doorMaterial.ambientColor = new BABYLON.Color3(0.23, 0.24, 0.24);
+          doorMaterial.alpha = 1;
+
+
+          // 壁
+          let bDt = getWallData();
+          for (let i = 0; bDt.length > i; i++) {
+            createBox(bDt[i].id, bDt[i].x1, bDt[i].y1, bDt[i].z1, bDt[i].x2, bDt[i].y2, bDt[i].z2, wallMaterial);
+          }
+
+          // 柱
+          let pDt = getPillarData();
+          for (let i = 0; pDt.length > i; i++) {
+            createPillar(pDt[i].id, pDt[i].x, pDt[i].y, pDt[i].z, pDt[i].r, pDt[i].h, pDt[i].shape, wallMaterial);
+          }
+
+          // ドア
+          let brDt = getDoorData();
+          for (let i = 0; brDt.length > i; i++) {
+            createBox(brDt[i].id, brDt[i].x1, brDt[i].y1, brDt[i].z1, brDt[i].x2, brDt[i].y2, brDt[i].z2, doorMaterial);
+          }
+
+          createslub(wallMaterial);
+
+          const radius = 2;
+
+          const angle = Math.PI / 10;
+
+          return scene;
+        };
+        
+        // フロア
+        function createslub(wallMaterial) {
+          const sluboutline = [
+            new BABYLON.Vector3(1.1, 0, - 1.1),
+            new BABYLON.Vector3(-58.4, 0, - 1.1),
+            new BABYLON.Vector3(-58.4, 0, 14.1),
+            new BABYLON.Vector3(-82.5, 0, 14.1),
+            new BABYLON.Vector3(-82.5, 0, - 1.1),
+            new BABYLON.Vector3(-135.5, 0, - 1.1),
+            new BABYLON.Vector3(-135.5, 0, 45.9),
+            new BABYLON.Vector3(1.1, 0, 45.9),
+            new BABYLON.Vector3(1.1, 0, - 1.1),
+            new BABYLON.Vector3(1.1, 10, - 1.1),
+            new BABYLON.Vector3(1.1, 10, 45.9),
+            new BABYLON.Vector3(-135.5, 10, 45.9),
+            new BABYLON.Vector3(-135.5, 10, - 1.1),
+            new BABYLON.Vector3(-82.5, 10, - 1.1),
+            new BABYLON.Vector3(-82.5, 10, 14.1),
+            new BABYLON.Vector3(-58.4, 10, 14.1),
+            new BABYLON.Vector3(-58.4, 10, - 1.1),
+            new BABYLON.Vector3(1.1, 10, - 1.1),
+            new BABYLON.Vector3(-58.4, 10, - 1.1),
+            new BABYLON.Vector3(-58.4, 10, 14.1),
+            new BABYLON.Vector3(-82.5, 10, 14.1),
+            new BABYLON.Vector3(-82.5, 10, - 1.1),
+            new BABYLON.Vector3(-135.5, 10, - 1.1),
+            new BABYLON.Vector3(-135.5, 10, 45.9),
+            new BABYLON.Vector3(1.1, 10, 45.9),
+            new BABYLON.Vector3(1.1, 10, - 1.1), 
+          ]
+
+          const slub = BABYLON.MeshBuilder.ExtrudePolygon("slub1", {shape: sluboutline, depth: 0.2});      
+          BABYLON.StandardMaterial        
+          slub.position.x =  140.8;              
+          slub.position.y =  20.3;
+          
+          slub.material = wallMaterial;          
+
+          const slub2 = slub.clone("slub2");
+          slub2.position.x =  140.8;              
+          slub2.position.y =  40.3;
+
+          const slub3 = slub.clone("slub3");
+          slub3.position.x =  140.8;              
+          slub3.position.y =  60.3;
+        }
+
+        function createBox(id, x1, y1, z1, x2, y2, z2, mate) {
+          if (x1 == x2) { x2 = x2 + 0.2 }
+          if (z1 == z2) { z2 = z2 + 0.2 }
+          if (x1 > x2) { [x1, x2] = [x2, x1]; }
+          if (z1 > z2) { [z1, z2] = [z2, z1]; }
+          
+          if (id == null || id == undefined) {
+            id = "";
+          }
+
+          const box = BABYLON.MeshBuilder.CreateBox(`box_${id}`, { width: Math.abs(x1 - x2), height: Math.abs(y1 - y2), depth: Math.abs(z1 - z2) })
+          box.position.x = x1 + Math.abs(x1 - x2) / 2;
+          box.position.y = y1 + Math.abs(y1 - y2) / 2;
+          box.position.z = z1 + Math.abs(z1 - z2) / 2;
+          box.material = mate;
+        }
+
+        function createBooth(id, x1, y1, z1, x2, y2, z2, mate) {
+          if (x1 == x2) { x2 = x2 + 0.2 }
+          if (z1 == z2) { z2 = z2 + 0.2 }
+          if (x1 > x2) { [x1, x2] = [x2, x1]; }
+          if (z1 > z2) { [z1, z2] = [z2, z1]; }
+          
+          if (id == null || id == undefined) {
+            id = "";
+          }
+
+          const box = BABYLON.MeshBuilder.CreateBox(`booth_${id}`, { width: Math.abs(x1 - x2), height: Math.abs(y1 - y2), depth: Math.abs(z1 - z2) })
+          box.position.x = x1 + Math.abs(x1 - x2) / 2;
+          box.position.y = y1 + Math.abs(y1 - y2) / 2;
+          box.position.z = z1 + Math.abs(z1 - z2) / 2;
+          box.material = mate;
+        }
+
+        function createPillar(id, x, y, z, r, h, shape, mate) {
+          if (shape == "box") {
+            let pillar = BABYLON.MeshBuilder.CreateBox(`pillar_x${x}_z${z}`, { height: h, width: r, depth: r });
+            pillar.position = new BABYLON.Vector3(x, y + h / 2, z);
+
+          } else {
+            let pillar = BABYLON.MeshBuilder.CreateCylinder(`pillar_x${x}_z${z}`, { height: h, width: r, depth: r });
+            pillar.position = new BABYLON.Vector3(x, y + h / 2, z);
+          }
+        }
+
+        // 壁
+        function getWallData() {
+          let boxData = [
+
+            // 外壁
+            { "x1": 141.9, "y1": 0, "z1": - 1.1, "x2": 139.7, "y2": 67, "z2": 45.9 },
+            { "x1": 7.5, "y1": 0, "z1": - 1.1, "x2": 5.3, "y2": 67, "z2": 45.9  },
+            { "x1": 140, "y1": 0, "z1": 45.9, "x2": 6.4, "y2": 67, "z2": 43.7 },
+            { "x1": 140, "y1": 0, "z1": 1.1, "x2": 6.4, "y2": 67, "z2": - 1.1 },
+
+            // 内装(横)
+            { "x1": 140.8, "y1": 0, "z1": 30.7, "x2": 81.9, "y2": 20, "z2": 28.5 },
+            { "x1": 58.9, "y1": 0, "z1": 30.7, "x2": 6.4, "y2": 20, "z2": 28.5 },
+
+            { "x1": 84.3, "y1": 60, "z1": 15.9, "x2": 56.5, "y2": 80, "z2": 13.7 },
+            { "x1": 84.3, "y1": 60, "z1": 1.1, "x2": 56.5, "y2": 80, "z2": - 1.1 },
+
+            { "x1": 140.8, "y1": 20, "z1": 30.7, "x2": 6.4, "y2": 60, "z2": 28.5 },
+            { "x1": 140.8, "y1": 0, "z1": 15.9, "x2": 6.4, "y2": 60, "z2": 13.7 },
+
+            // 内装(縦)
+            { "x1": 101.9, "y1": 0, "z1": 0, "x2": 107.7, "y2": 60, "z2": 14.8 },
+            { "x1": 101.9, "y1": 0, "z1": 29.6, "x2": 107.7, "y2": 60, "z2": 44.8 },
+
+            { "x1": 84.3, "y1": 0, "z1": 0, "x2": 82.1, "y2": 80, "z2": 14.8 },
+            { "x1": 84.3, "y1": 0, "z1": 29.6, "x2": 82.1, "y2": 60, "z2": 44.8 },
+
+            { "x1": 58.7, "y1": 0, "z1": 0, "x2": 56.5, "y2": 80, "z2": 14.8 },
+            { "x1": 58.7, "y1": 0, "z1": 29.6, "x2": 56.5, "y2": 60, "z2": 44.8 },
+
+            { "x1": 33.1, "y1": 0, "z1": 0, "x2": 30.9, "y2": 60, "z2": 14.8 },
+            { "x1": 33.1, "y1": 0, "z1": 29.6, "x2": 30.9, "y2": 60, "z2": 44.8 },
+
+            // 床
+            { "x1": -12, "y1": 1, "z1": -6.3, "x2": 150, "y2": 1, "z2": 50 },
+
+            { "x1": 6.4, "y1": 1, "z1": 0, "x2": 140.8, "y2": 1, "z2": 44.8 },
+            { "x1": 84.3, "y1": 80, "z1": - 1.1, "x2": 56.5, "y2": 80, "z2": 15.9},
+
+          ];
+          return boxData;
+        }
+
+        // ドア
+        function getDoorData() {
+          let boxData = [
+
+            // 入口
+            { "x1": 77, "y1": 0, "z1": 44, "x2": 63, "y2": 16, "z2": 46 },
+            { "x1": 135, "y1": 0, "z1": 28.2, "x2": 125, "y2": 13, "z2": 31.2 },
+            { "x1": 105, "y1": 0, "z1": 28.2, "x2": 95, "y2": 13, "z2": 31.2 },
+            { "x1": 53, "y1": 0, "z1": 28.2, "x2": 43, "y2": 13, "z2": 31.2 },
+            { "x1": 27, "y1": 0, "z1": 28.2, "x2": 17, "y2": 13, "z2": 31.2 },
+            { "x1": 135, "y1": 0, "z1": 13.2, "x2": 125, "y2": 13, "z2": 16.2 },
+            { "x1": 105, "y1": 0, "z1": 13.2, "x2": 95, "y2": 13, "z2": 16.2 },
+            { "x1": 77, "y1": 0, "z1": 13.2, "x2": 63, "y2": 16, "z2": 16.2 },
+            { "x1": 53, "y1": 0, "z1": 13.2, "x2": 43, "y2": 13, "z2": 16.2 },
+            { "x1": 27, "y1": 0, "z1": 13.2, "x2": 17, "y2": 13, "z2": 16.2 },
+
+            { "x1": 135, "y1": 20, "z1": 28.2, "x2": 125, "y2": 33, "z2": 31.2 },
+            { "x1": 105, "y1": 20, "z1": 28.2, "x2": 95, "y2": 33, "z2": 31.2 },
+            { "x1": 77, "y1": 20, "z1": 28.2, "x2": 67, "y2": 33, "z2": 31.2 },
+            { "x1": 53, "y1": 20, "z1": 28.2, "x2": 43, "y2": 33, "z2": 31.2 },
+            { "x1": 27, "y1": 20, "z1": 28.2, "x2": 17, "y2": 33, "z2": 31.2 },
+            { "x1": 135, "y1": 20, "z1": 13.2, "x2": 125, "y2": 33, "z2": 16.2 },
+            { "x1": 105, "y1": 20, "z1": 13.2, "x2": 95, "y2": 33, "z2": 16.2 },
+            { "x1": 77, "y1": 20, "z1": 13.2, "x2": 63, "y2": 36, "z2": 16.2 },
+            { "x1": 53, "y1": 20, "z1": 13.2, "x2": 43, "y2": 33, "z2": 16.2 },
+            { "x1": 27, "y1": 20, "z1": 13.2, "x2": 17, "y2": 33, "z2": 16.2 },  
+            
+            { "x1": 135, "y1": 40, "z1": 28.2, "x2": 125, "y2": 53, "z2": 31.2 },
+            { "x1": 105, "y1": 40, "z1": 28.2, "x2": 95, "y2": 53, "z2": 31.2 },
+            { "x1": 77, "y1": 40, "z1": 28.2, "x2": 67, "y2": 53, "z2": 31.2 },
+            { "x1": 53, "y1": 40, "z1": 28.2, "x2": 43, "y2": 53, "z2": 31.2 },
+            { "x1": 27, "y1": 40, "z1": 28.2, "x2": 17, "y2": 53, "z2": 31.2 },
+            { "x1": 135, "y1": 40, "z1": 13.2, "x2": 125, "y2": 53, "z2": 16.2 },
+            { "x1": 105, "y1": 40, "z1": 13.2, "x2": 95, "y2": 53, "z2": 16.2 },
+            { "x1": 77, "y1": 40, "z1": 13.2, "x2": 63, "y2": 56, "z2": 16.2 },
+            { "x1": 53, "y1": 40, "z1": 13.2, "x2": 43, "y2": 53, "z2": 16.2 },
+            { "x1": 27, "y1": 40, "z1": 13.2, "x2": 17, "y2": 53, "z2": 16.2 }, 
+
+            { "x1": 77, "y1": 60, "z1": 13.2, "x2": 63, "y2": 76, "z2": 16.2 },
+
+          ];
+          return boxData; 
+        }
+
+        // 柱
+        function getPillarData() {
+          let pData = [
+            { "x": 6.4, "y": 0, "z": 0, "r": 2, "h": 60, "shape": "box" },
+            { "x": 32, "y": 0, "z": 0, "r": 2, "h": 60, "shape": "box" },
+            { "x": 57.6, "y": 0, "z": 0, "r": 2, "h": 60, "shape": "box" },
+            { "x": 83.2, "y": 0, "z": 0, "r": 2, "h": 60, "shape": "box" },
+            { "x": 108.8, "y": 0, "z": 0, "r": 2, "h": 60, "shape": "box" },
+            { "x": 140.8, "y": 0, "z": 0, "r": 2, "h": 60, "shape": "box" },
+
+            { "x": 6.4, "y": 0, "z": 14.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 32, "y": 0, "z": 14.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 57.6, "y": 0, "z": 14.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 83.2, "y": 0, "z": 14.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 108.8, "y": 0, "z": 14.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 140.8, "y": 0, "z": 14.8, "r": 2, "h": 60, "shape": "box" },
+
+            { "x": 6.4, "y": 0, "z": 29.6, "r": 2, "h": 60, "shape": "box" },
+            { "x": 32, "y": 0, "z": 29.6, "r": 2, "h": 60, "shape": "box" },
+            { "x": 57.6, "y": 0, "z": 29.6, "r": 2, "h": 60, "shape": "box" },
+            { "x": 83.2, "y": 0, "z": 29.6, "r": 2, "h": 60, "shape": "box" },
+            { "x": 108.8, "y": 0, "z": 29.6, "r": 2, "h": 60, "shape": "box" },
+            { "x": 140.8, "y": 0, "z": 29.6, "r": 2, "h": 60, "shape": "box" },
+
+            { "x": 6.4, "y": 0, "z": 44.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 32, "y": 0, "z": 44.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 57.6, "y": 0, "z": 44.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 83.2, "y": 0, "z": 44.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 108.8, "y": 0, "z": 44.8, "r": 2, "h": 60, "shape": "box" },
+            { "x": 140.8, "y": 0, "z": 44.8, "r": 2, "h": 60, "shape": "box" },
+          ];
+          return pData;
+        }
+
+        const scene = createScene();
+        
+        engine.runRenderLoop(() => {
+          scene.render();
+        });
+        
+        window.addEventListener('resize', () => {
+          engine.resize();
+        });
+      }
+      window.addEventListener('DOMContentLoaded', main);
 </script>
 
 <style is:global>
@@ -43,5 +324,8 @@
 		width   : 100%;
 		height  : 100%;
 		touch-action: none;
+		position: absolute;
+		top:0;
+		left: 0;
 	}
 </style>
