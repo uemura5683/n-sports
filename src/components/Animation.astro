@@ -5,69 +5,64 @@
 <script is:inline src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
 <script is:inline src="https://unpkg.com/earcut@latest/dist/earcut.min.js"></script>
 <script type="text/javascript">
-      function main() {
-        const canvas = document.getElementById('renderCanvas');
-        const engine = new BABYLON.Engine(canvas);
+  function main() {
+    const canvas = document.getElementById('renderCanvas');
+    const engine = new BABYLON.Engine(canvas);
 
-        function degree(degrees) {
-          return degrees * (Math.PI / 180);
-        }
+    function degree(degrees) {
+      return degrees * (Math.PI / 180);
+    }
 
-        const TARGET_BOOTH_ID = "A1";
+    const createScene = function () {
+      const scene = new BABYLON.Scene(engine);
 
-        const createScene = function () {
-          const scene = new BABYLON.Scene(engine);
+      const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 15, new BABYLON.Vector3(0, 0, 0));
+      camera.position = new BABYLON.Vector3(18, 18, 18);
+      camera.setTarget(new BABYLON.Vector3(0, 0, 0));
+      camera.upperBetaLimit = Math.PI / 2.2;
+      camera.attachControl(canvas, true);
 
-          const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 15, new BABYLON.Vector3(0, 0, 0));
-          camera.position = new BABYLON.Vector3(20, 20, 20);
-          camera.setTarget(new BABYLON.Vector3(0, 0, 0));
-          camera.upperBetaLimit = Math.PI / 2.2;
-          camera.attachControl(canvas, true);
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+            light.intensity = 0.8;
 
-          const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-          light.intensity = 0.8;
+      // 空
+      const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
+      const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
 
-          // 空
-          const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
-          const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-                skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky/skybox", scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 
-                skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("https://raw.githubusercontent.com/uemura5683/babylonjs/main/apartment/textures/skybox", scene);
-                skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skybox.material = skyboxMaterial;
+        
 
-                skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-                skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-                skybox.material = skyboxMaterial;
-            
+      const largeGroundMat = new BABYLON.StandardMaterial("largeGroundMat");
+            largeGroundMat.diffuseTexture = new BABYLON.Texture("textures/ground/valleygrass.png");
+      
+      const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "textures/ground/villageheightmap.png", {width:72, height:72, subdivisions: 10, minHeight:0, maxHeight: 7});
+            largeGround.material = largeGroundMat;
+            largeGround.rotation.y = degree(90);
+            largeGround.position.y = -0.5;
 
-          const largeGroundMat = new BABYLON.StandardMaterial("largeGroundMat");
-          largeGroundMat.diffuseTexture = new BABYLON.Texture("textures/ground/valleygrass.png");
-          
-          const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "textures/ground/villageheightmap.png", {width:72, height:72, subdivisions: 10, minHeight:0, maxHeight: 6});
-          largeGround.material = largeGroundMat;
-          largeGround.rotation.y = degree(90);
-          largeGround.position.y = -0.5;
+      const radius = 2;
+      const angle = Math.PI / 10;
+      return scene;
+    };
 
 
-          const radius = 2;
-
-          const angle = Math.PI / 10;
-
-          return scene;
-        };
+    const scene = createScene();
     
-
-        const scene = createScene();
-        
-        engine.runRenderLoop(() => {
-          scene.render();
-        });
-        
-        window.addEventListener('resize', () => {
-          engine.resize();
-        });
-      }
-      window.addEventListener('DOMContentLoaded', main);
+    engine.runRenderLoop(() => {
+      scene.render();
+    });
+    
+    window.addEventListener('resize', () => {
+      engine.resize();
+    });
+  }
+  window.addEventListener('DOMContentLoaded', main);
 </script>
 
 <style is:global>
