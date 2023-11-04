@@ -39,10 +39,34 @@
       const largeGroundMat = new BABYLON.StandardMaterial("largeGroundMat");
             largeGroundMat.diffuseTexture = new BABYLON.Texture("textures/ground/valleygrass.png");
       
-      const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "textures/ground/villageheightmap.png", {width:72, height:72, subdivisions: 10, minHeight:0, maxHeight: 7});
+      const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "textures/ground/villageheightmap.png", {width:72, height:72, subdivisions: 10, minHeight:0, maxHeight: 10});
             largeGround.material = largeGroundMat;
             largeGround.rotation.y = degree(90);
             largeGround.position.y = -0.5;
+
+      // 木を作成
+      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood1.png", 1000, {width: 618, height: 680}, scene);
+
+        for (let i = 0; i < 500; i++) {
+
+          switch(true) {
+            case i > 400:
+              const tree2 = new BABYLON.Sprite("tree", spritetree);
+              tree2.width = 1.5;
+              tree2.height = 2;              
+              tree2.position.x = Math.random() * (10) - 17;
+              tree2.position.z = Math.random() * -7  - 1;
+              tree2.position.y = 2.5;
+            default:
+              const tree3 = new BABYLON.Sprite("tree", spritetree);
+              tree3.width = 1.5;
+              tree3.height = 2;                 
+              tree3.position.x = Math.random() * (-12) + 18;
+              tree3.position.z = Math.random() * 20 + 4;
+              tree3.position.y = 2.5;
+          }
+        }
+
 
       /*
       var frameRate = 10;
