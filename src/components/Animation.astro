@@ -4,6 +4,7 @@
 <script is:inline src="https://cdn.babylonjs.com/materialsLibrary/babylon.gridMaterial.js"></script>
 <script is:inline src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
 <script is:inline src="https://unpkg.com/earcut@latest/dist/earcut.min.js"></script>
+<script is:inlune src="https://cdn.babylonjs.com/materialsLibrary/babylon.waterMaterial.js"></script>
 <script type="text/javascript">
   function main() {
     const canvas = document.getElementById('renderCanvas');
@@ -44,26 +45,43 @@
             largeGround.rotation.y = degree(90);
             largeGround.position.y = -0.5;
 
+      // 水を作成
+      var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 15, 15, 15, scene, false);
+      var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
+      water.backFaceCulling = true;
+      water.bumpTexture = new BABYLON.Texture("textures/water/waterbump.png", scene);
+      water.windForce = -5;
+      water.waveHeight = 0.2;
+      water.bumpHeight = 0.05;
+      water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
+      water.colorBlendFactor = 0.5;
+      water.addToRenderList(skybox);
+      water.addToRenderList(largeGround);
+      waterMesh.material = water;
+      waterMesh.position.x = 5;      
+      waterMesh.position.y = .1;
+      waterMesh.position.z = 28;         
+
       // 木を作成
-      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood1.png", 1000, {width: 618, height: 680}, scene);
+      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 1000, {width: 618, height: 680}, scene);
 
         for (let i = 0; i < 500; i++) {
 
           switch(true) {
             case i > 400:
               const tree2 = new BABYLON.Sprite("tree", spritetree);
-              tree2.width = 1.5;
-              tree2.height = 2;              
+              tree2.width = 2;
+              tree2.height = 3;              
               tree2.position.x = Math.random() * (10) - 17;
               tree2.position.z = Math.random() * -7  - 1;
-              tree2.position.y = 2.5;
+              tree2.position.y = 3;
             default:
               const tree3 = new BABYLON.Sprite("tree", spritetree);
-              tree3.width = 1.5;
-              tree3.height = 2;                 
+              tree3.width = 2;
+              tree3.height = 3;                 
               tree3.position.x = Math.random() * (-12) + 18;
-              tree3.position.z = Math.random() * 20 + 4;
-              tree3.position.y = 2.5;
+              tree3.position.z = Math.random() * 20 + 3;
+              tree3.position.y = 3;
           }
         }
 
