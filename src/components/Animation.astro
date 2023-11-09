@@ -51,7 +51,7 @@
       water.backFaceCulling = true;
       water.bumpTexture = new BABYLON.Texture("textures/water/waterbump.png", scene);
       water.windForce = -5;
-      water.waveHeight = 0.01;
+      water.waveHeight = 0.03;
       water.bumpHeight = 0.05;
       water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
       water.colorBlendFactor = 0.5;
@@ -59,7 +59,7 @@
       water.addToRenderList(largeGround);
       waterMesh.material = water;
       waterMesh.position.x = 3.5;      
-      waterMesh.position.y = 0.4;
+      waterMesh.position.y = 0.1;
       waterMesh.position.z = 28.5;         
 
       // 木を作成
