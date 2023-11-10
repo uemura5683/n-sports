@@ -26,5 +26,15 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        ".text-shadow-white": {
+          textShadow: "0px 0px 5px white"
+        }
+      };
+
+      addUtilities(newUtilities);
+    }
+  ],
 }
