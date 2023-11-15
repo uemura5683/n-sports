@@ -121,24 +121,16 @@
               const treer_5 = new BABYLON.Sprite("tree", spritetree);
               treer_5.width = 2;
               treer_5.height = 3;              
-              treer_5.position.x = Math.random() * (11) - 0;
-              treer_5.position.z = Math.random() * -1  - 18;
+              treer_5.position.x = Math.random() * (1) + (11 - ((60 - i) * 1.3 ));
+              treer_5.position.z = Math.random() * -1  - (19.5 - ((60 - i) * .4 ));
               treer_5.position.y = 3.5;
               break;
-            case i > 61 && i < 70:
-              const treer_6 = new BABYLON.Sprite("tree", spritetree);
-              treer_6.width = 2;
-              treer_6.height = 3;              
-              treer_6.position.x = Math.random() * (11) + 8;
-              treer_6.position.z = Math.random() * -1  - 22;
-              treer_6.position.y = 3.5;
-              break;
-            case i > 71 && i < 80:
+            case i > 61 && i < 80:
               const treer_7 = new BABYLON.Sprite("tree", spritetree);
               treer_7.width = 2;
               treer_7.height = 3;              
-              treer_7.position.x = Math.random() * 1 + (32 - ((80 - i) * 1.3 ));
-              treer_7.position.z = Math.random() * -1  - (29 - ((80 - i) * .6));
+              treer_7.position.x = Math.random() * 1 + (35 - ((80 - i) * 1.3 ));
+              treer_7.position.z = Math.random() * -1  - (30.5 - ((80 - i) * .6));
               treer_7.position.y = 3.5;
               break;
             // front area
