@@ -82,7 +82,7 @@
       // position y 上 + 下 -
       // position z 左 + 右 -
       const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 1000, {width: 538, height: 680}, scene);
-        for (let i = 0; i < 440; i++) {
+        for (let i = 0; i < 500; i++) {
           switch(true) {
             // right side
             case i > 0 && i < 5:
@@ -250,7 +250,8 @@
               break;
           }
         }
-
+        
+        // 噴水を作成
         BABYLON.SceneLoader.ImportMeshAsync("", "", "fountain.babylon").then(() =>  {
 
           const fountain = scene.getMeshByName("fountain");
@@ -266,12 +267,12 @@
           particleSystem.minEmitBox = new BABYLON.Vector3(0, 0, 0);
           particleSystem.maxEmitBox = new BABYLON.Vector3(0, 0, 0);
 
-          particleSystem.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
-          particleSystem.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1.0);
-          particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0.0);
+          particleSystem.color1 = new BABYLON.Color4(0.1, 0.1, 0.2, 1.0);
+          particleSystem.color2 = new BABYLON.Color4(0.1, 0.1, 0.2, 1.0);
+          particleSystem.colorDead = new BABYLON.Color4(0.1, 0.1, 0.2, 0.0);
 
           particleSystem.minSize = 0.1 / 2;
-          particleSystem.maxSize = 0.5 / 2;
+          particleSystem.maxSize = 1 / 2;
 
           particleSystem.minLifeTime = 1;
           particleSystem.maxLifeTime = 2.5;
