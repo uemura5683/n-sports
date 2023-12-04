@@ -22,15 +22,36 @@
       camera.position = new BABYLON.Vector3(25, 25, 25);
       camera.attachControl(canvas, true);
 
-      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-            light.intensity = .6;
+      // 光源設定
+
+      // noon
+      // const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+      //       light.intensity = .6;
+
+      // night
+      const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
+      spot.diffuse = new BABYLON.Color3(.7, .7, .7);
+      spot.specular = new BABYLON.Color3(0, 0, 0);
+      spot.position.y = 20;
+      spot.position.x = 45;
+
+      const moon = BABYLON.Mesh.CreateSphere("sun", 10, 4);
+      moon.material = new BABYLON.StandardMaterial("sun");
+      moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
+      moon.position.y = 20;
+      moon.position.x = 45;
 
       // 空
       const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
       const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
             skyboxMaterial.backFaceCulling = false;
 
-            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky/skybox", scene);
+            // night
+            // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky/skybox", scene);
+            // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+
+            // night
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky_night/skybox", scene);
             skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 
             skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
@@ -81,8 +102,14 @@
       // position x 前 + 後 -
       // position y 上 + 下 -
       // position z 左 + 右 -
-      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 1000, {width: 538, height: 680}, scene);
-        for (let i = 0; i < 500; i++) {
+
+      // noon
+      // const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 1000, {width: 538, height: 680}, scene);
+
+      // night
+      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood_dark.png", 1000, {width: 538, height: 680}, scene);
+
+        for (let i = 0; i < 270; i++) {
           switch(true) {
             // right side
             case i > 0 && i < 5:
@@ -93,7 +120,7 @@
               treer_1.position.z = Math.random() * -2  - (6 - ((5 - i) * 1.3 ));
               treer_1.position.y = 3.7;
               break;    
-            case i > 6 && i < 15:
+            case i > 5 && i < 15:
               const treer_2 = new BABYLON.Sprite("tree", spritetree);
               treer_2.width = 2;
               treer_2.height = 3;              
@@ -101,7 +128,7 @@
               treer_2.position.z = Math.random() * -1  - (11- ((15 - i) * .7 ));
               treer_2.position.y = 3.7;
               break;   
-            case i > 16 && i < 25:
+            case i > 15 && i < 25:
               const treer_3 = new BABYLON.Sprite("tree", spritetree);
               treer_3.width = 2;
               treer_3.height = 3;              
@@ -109,7 +136,7 @@
               treer_3.position.z = Math.random() * -1  - (14 - ((25 - i) * .4 ));
               treer_3.position.y = 3.5;
               break;
-            case i > 26 && i < 35:
+            case i > 25 && i < 35:
               const treer_4 = new BABYLON.Sprite("tree", spritetree);
               treer_4.width = 2;
               treer_4.height = 3;              
@@ -117,7 +144,7 @@
               treer_4.position.z = Math.random() * -1  - (17 - ((35 - i) * .4 ));
               treer_4.position.y = 3.5;
               break;
-            case i > 36 && i < 45:
+            case i > 35 && i < 45:
               const treer_5 = new BABYLON.Sprite("tree", spritetree);
               treer_5.width = 2;
               treer_5.height = 3;              
@@ -125,7 +152,7 @@
               treer_5.position.z = Math.random() * -1  - (19.5 - ((45 - i) * .4 ));
               treer_5.position.y = 3.5;
               break;
-            case i > 46 && i < 65:
+            case i > 45 && i < 65:
               const treer_7 = new BABYLON.Sprite("tree", spritetree);
               treer_7.width = 2;
               treer_7.height = 3;              
@@ -134,7 +161,7 @@
               treer_7.position.y = 3.5;
               break;
             // front area
-            case i > 80 && i < 150:
+            case i > 65 && i < 150:
               const treef_1 = new BABYLON.Sprite("tree", spritetree);
               treef_1.width = 2;
               treef_1.height = 3;              
@@ -142,7 +169,7 @@
               treef_1.position.z = Math.random() * 15  - 4;
               treef_1.position.y = 3.8;
               break;
-            case i > 151 && i < 180:
+            case i > 150 && i < 180:
               const treef_2 = new BABYLON.Sprite("tree", spritetree);
               treef_2.width = 2;
               treef_2.height = 3;              
@@ -150,7 +177,7 @@
               treef_2.position.z = Math.random() * 10  + 6;
               treef_2.position.y = 3.8;
               break;
-            case i > 181 && i < 200:
+            case i > 180 && i < 200:
               const treef_3 = new BABYLON.Sprite("tree", spritetree);
               treef_3.width = 2;
               treef_3.height = 3;              
@@ -158,7 +185,7 @@
               treef_3.position.z = Math.random() * 6  + 14;
               treef_3.position.y = 3.8;
               break;
-            case i > 201 && i < 220:
+            case i > 200 && i < 220:
               const treef_4 = new BABYLON.Sprite("tree", spritetree);
               treef_4.width = 2;
               treef_4.height = 3;              
@@ -166,79 +193,13 @@
               treef_4.position.z = Math.random() * 6  + 20;
               treef_4.position.y = 3.8;
               break;
-            case i > 221 && i < 250:
+            case i > 220 && i < 250:
               const treef_5 = new BABYLON.Sprite("tree", spritetree);
               treef_5.width = 2;
               treef_5.height = 3;              
               treef_5.position.x = Math.random() * (6) - 8;
               treef_5.position.z = Math.random() * 8  + 27;
               treef_5.position.y = 3.8;
-              break;
-
-            // back
-            case i > 251 && i < 270:
-              const treeb_1 = new BABYLON.Sprite("tree", spritetree);
-              treeb_1.width = 2;
-              treeb_1.height = 3;                 
-              treeb_1.position.x = Math.random() * (-1) + 20.5;
-              treeb_1.position.z = Math.random() * 8 + 27;
-              treeb_1.position.y = 4.5;
-              break;
-            case i > 271 && i < 290:
-              const treeb_2 = new BABYLON.Sprite("tree", spritetree);
-              treeb_2.width = 2;
-              treeb_2.height = 3;                 
-              treeb_2.position.x = Math.random() * (-1) + 22;
-              treeb_2.position.z = Math.random() * 8 + 27;
-              treeb_2.position.y = 5.7;
-              break;
-            case i > 291 && i < 310:
-              const treeb_3 = new BABYLON.Sprite("tree", spritetree);
-              treeb_3.width = 2;
-              treeb_3.height = 3;                 
-              treeb_3.position.x = Math.random() * (-1) + 23.5;
-              treeb_3.position.z = Math.random() * 10 + 25;
-              treeb_3.position.y = 7;
-              break;
-            case i > 311 && i < 330:
-              const treeb_4 = new BABYLON.Sprite("tree", spritetree);
-              treeb_4.width = 2;
-              treeb_4.height = 3;                 
-              treeb_4.position.x = Math.random() * (-1) + 25;
-              treeb_4.position.z = Math.random() * 10 + 25;
-              treeb_4.position.y = 7.8;
-              break;
-            case i > 331 && i < 380:
-              const treeb_5 = new BABYLON.Sprite("tree", spritetree);
-              treeb_5.width = 2;
-              treeb_5.height = 3;                 
-              treeb_5.position.x = Math.random() * (-1) + 26.5;
-              treeb_5.position.z = Math.random() * 10 + 25;
-              treeb_5.position.y = 8.3;
-              break;
-            case i > 381 && i < 390:
-              const treeb_6 = new BABYLON.Sprite("tree", spritetree);
-              treeb_6.width = 2;
-              treeb_6.height = 3;                 
-              treeb_6.position.x = Math.random() * (-1) + 28;
-              treeb_6.position.z = Math.random() * 5 + 20;
-              treeb_6.position.y = 8.0;
-              break;
-            case i > 391 && i < 400: 
-              const treeb_7 = new BABYLON.Sprite("tree", spritetree);
-              treeb_7.width = 2;
-              treeb_7.height = 3;                 
-              treeb_7.position.x = Math.random() * (-1) + 28;
-              treeb_7.position.z = Math.random() * 5 + 23;
-              treeb_7.position.y = 8.45;
-              break;            
-            case i > 401 && i < 420:
-              const treeb_8 = new BABYLON.Sprite("tree", spritetree);
-              treeb_8.width = 2;
-              treeb_8.height = 3;                 
-              treeb_8.position.x = Math.random() * (-1) + 28;
-              treeb_8.position.z = Math.random() * 10 + 25;
-              treeb_8.position.y = 8.7;
               break;
             default:
               const tree = new BABYLON.Sprite("tree", spritetree);
