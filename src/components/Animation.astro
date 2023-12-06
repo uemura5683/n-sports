@@ -19,39 +19,52 @@
 
       const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 15, new BABYLON.Vector3(0, 0, 0));
       //camera.position = new BABYLON.Vector3(30, 12, 12);
-      camera.position = new BABYLON.Vector3(40, 40, 40);
+      camera.position = new BABYLON.Vector3(35, 35, 35);
       camera.attachControl(canvas, true);
 
       // 光源設定
 
       // 昼
-      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-           light.intensity = .6;
+      // const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+      //     light.intensity = .6;
 
       // 夜
-      // const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
-      // spot.diffuse = new BABYLON.Color3(.7, .7, .7);
-      // spot.specular = new BABYLON.Color3(0, 0, 0);
-      // spot.position.y = 20;
-      // spot.position.x = 45;
+      const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
+      spot.diffuse = new BABYLON.Color3(.7, .7, .7);
+      spot.specular = new BABYLON.Color3(0, 0, 0);
+      spot.position.y = 20;
+      spot.position.x = 45;
 
-      // const moon = BABYLON.Mesh.CreateSphere("moon", 10, 4);
-      // moon.material = new BABYLON.StandardMaterial("moon");
-      // moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
-      // moon.position.y = 20;
-      // moon.position.x = 45;
+      const moon = BABYLON.Mesh.CreateSphere("moon", 10, 4);
+      moon.material = new BABYLON.StandardMaterial("moon");
+      moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
+      moon.position.y = 20;
+      moon.position.x = 45;
 
       const tea = BABYLON.Mesh.CreateSphere("tea", 10, .5);
-      tea.material = new BABYLON.StandardMaterial("tea");
+      tea.material = new BABYLON.StandardMaterial("teamaterial");
       tea.material.diffuseColor = new BABYLON.Color3(1, 1, 1);  
-      tea.position.y = 8;
+      tea.position.y = 7.9;
       tea.position.x = -27.5;
       tea.position.z = 24;
 
       const tea1 = tea.clone();
-      tea1.position.y = 8;
-      tea1.position.x = -24;
+      tea1.position.y = 7.9;
+      tea1.position.x = -23.5;
       tea1.position.z = 28.5;
+
+      const tea_under = BABYLON.MeshBuilder.CreateCylinder("tea_under", {height:.5, diameter: .1});
+      const tea_under_material = new BABYLON.StandardMaterial("tea_under_material", scene);
+      tea_under_material.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0.8);
+      tea_under_material.alpha = .9;
+      tea_under.material = tea_under_material;
+      tea_under.position.y = 7.5;
+      tea_under.position.x = -27.5;
+      tea_under.position.z = 24;
+
+      const tea_under1 = tea_under.clone();
+      tea_under1.position.x = -23.5;
+      tea_under1.position.z = 28.5;
 
 
       // 空
@@ -60,12 +73,12 @@
             skyboxMaterial.backFaceCulling = false;
 
             // 昼
-            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky/skybox", scene);
-            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky/skybox", scene);
+            // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 
             // 夜
-            // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky_night/skybox", scene);
-            // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky_night/skybox", scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 
             skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
             skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -84,7 +97,7 @@
       // カップを作成
       const golfcup = BABYLON.MeshBuilder.CreateCylinder("golfcup", {height:1, depth:0.1});
 
-      const golfcupMaterial = new BABYLON.StandardMaterial("doorMaterial", scene);
+      const golfcupMaterial = new BABYLON.StandardMaterial("golfcupmaterial", scene);
       golfcupMaterial.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0.8);
       golfcupMaterial.alpha = .9;
       golfcup.material = golfcupMaterial;
@@ -117,10 +130,10 @@
       // position z 左 + 右 -
 
       // 昼
-      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 1000, {width: 538, height: 680}, scene);
+      // const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 1000, {width: 538, height: 680}, scene);
 
       // 夜
-      // const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood_dark.png", 1000, {width: 538, height: 680}, scene);
+      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood_dark.png", 1000, {width: 538, height: 680}, scene);
 
         for (let i = 0; i < 270; i++) {
           switch(true) {
