@@ -19,14 +19,13 @@
 
       const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 15, new BABYLON.Vector3(0, 0, 0));
       //camera.position = new BABYLON.Vector3(30, 12, 12);
-      camera.position = new BABYLON.Vector3(35, 35, 35);
+      camera.position = new BABYLON.Vector3(30, 30, 30);
       camera.attachControl(canvas, true);
 
       // 光源設定
-
       // 昼
       // const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-      //     light.intensity = .6;
+      //       light.intensity = .6;
 
       // 夜
       const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
@@ -65,7 +64,6 @@
       const tea_under1 = tea_under.clone();
       tea_under1.position.x = -23.5;
       tea_under1.position.z = 28.5;
-
 
       // 空
       const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
@@ -238,6 +236,30 @@
           }
         }
         
+        // ランプを作成
+        BABYLON.SceneLoader.ImportMeshAsync("", "", "lamp.babylon").then(() =>{
+          const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0, -1, 0), 0.8 * Math.PI, 0.01, scene);
+          lampLight.diffuse = BABYLON.Color3.Yellow();
+          lampLight.parent = scene.getMeshByName("bulb")
+
+          const lamp = scene.getMeshByName("lamp");
+          lamp.position = new BABYLON.Vector3(2, 2, 2); 
+          lamp.rotation = BABYLON.Vector3.Zero();
+          lamp.rotation.y = -Math.PI / 2;
+          lamp.position.x = 23;
+          lamp.position.z = -27;
+
+          lamp3 = lamp.clone("lamp3");
+          lamp3.position.z = -20;
+          lamp3.position.x = 0;
+
+          lamp1 = lamp.clone("lamp1");
+          lamp1.position.z = -12;
+          lamp1.position.x = -23;
+
+
+      });
+
         // 噴水を作成
         BABYLON.SceneLoader.ImportMeshAsync("", "", "fountain.babylon").then(() =>  {
 
@@ -287,9 +309,6 @@
 
       return scene;
     };
-
-
-
 
     const scene = createScene();
     
