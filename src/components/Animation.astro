@@ -238,7 +238,7 @@
         
         // ランプを作成
         BABYLON.SceneLoader.ImportMeshAsync("", "", "lamp.babylon").then(() =>{
-          const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0, -1, 0), 0.8 * Math.PI, 0.01, scene);
+          const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0.3, -1, 0), 0.7 * Math.PI, 0.01, scene);
           lampLight.diffuse = BABYLON.Color3.Yellow();
           lampLight.parent = scene.getMeshByName("bulb")
 
