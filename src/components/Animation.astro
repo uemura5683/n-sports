@@ -128,10 +128,10 @@
       // position z 左 + 右 -
 
       // 昼
-      // const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 1000, {width: 538, height: 680}, scene);
+      // const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood.png", 270, {width: 538, height: 680}, scene);
 
       // 夜
-      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood_dark.png", 1000, {width: 538, height: 680}, scene);
+      const spritetree = new BABYLON.SpriteManager("treesManager", "textures/wood/wood_dark.png", 270, {width: 538, height: 680}, scene);
 
         for (let i = 0; i < 270; i++) {
           switch(true) {
@@ -142,7 +142,7 @@
               treer_1.height = 3;              
               treer_1.position.x = Math.random() * (1) - (30 + ((5 - i) * 1.1 ));
               treer_1.position.z = Math.random() * -2  - (6 - ((5 - i) * 1.3 ));
-              treer_1.position.y = 3.7;
+              treer_1.position.y = 3.2;
               break;    
             case i > 5 && i < 15:
               const treer_2 = new BABYLON.Sprite("tree", spritetree);
@@ -150,7 +150,7 @@
               treer_2.height = 3;              
               treer_2.position.x = Math.random() * (1) - (20 + ((15 - i) * 1.3 ));
               treer_2.position.z = Math.random() * -1  - (11- ((15 - i) * .7 ));
-              treer_2.position.y = 3.7;
+              treer_2.position.y = 3.2;
               break;   
             case i > 15 && i < 25:
               const treer_3 = new BABYLON.Sprite("tree", spritetree);
@@ -158,7 +158,7 @@
               treer_3.height = 3;              
               treer_3.position.x = Math.random() * (1) - (10 + ((25 - i) * 1.3 ));
               treer_3.position.z = Math.random() * -1  - (14 - ((25 - i) * .4 ));
-              treer_3.position.y = 3.5;
+              treer_3.position.y = 3.2;
               break;
             case i > 25 && i < 35:
               const treer_4 = new BABYLON.Sprite("tree", spritetree);
@@ -166,7 +166,7 @@
               treer_4.height = 3;              
               treer_4.position.x = Math.random() * (1) - (0 + ((35 - i) * 1.3 ));
               treer_4.position.z = Math.random() * -1  - (17 - ((35 - i) * .4 ));
-              treer_4.position.y = 3.5;
+              treer_4.position.y = 3.2;
               break;
             case i > 35 && i < 45:
               const treer_5 = new BABYLON.Sprite("tree", spritetree);
@@ -174,7 +174,7 @@
               treer_5.height = 3;              
               treer_5.position.x = Math.random() * (1) + (11 - ((45 - i) * 1.3 ));
               treer_5.position.z = Math.random() * -1  - (19.5 - ((45 - i) * .4 ));
-              treer_5.position.y = 3.5;
+              treer_5.position.y = 3.2;
               break;
             case i > 45 && i < 65:
               const treer_7 = new BABYLON.Sprite("tree", spritetree);
@@ -182,7 +182,7 @@
               treer_7.height = 3;              
               treer_7.position.x = Math.random() * 1 + (35 - ((65 - i) * 1.3 ));
               treer_7.position.z = Math.random() * -1  - (30.5 - ((65 - i) * .6));
-              treer_7.position.y = 3.5;
+              treer_7.position.y = 3.2;
               break;
             // front area
             case i > 65 && i < 150:
@@ -191,7 +191,7 @@
               treef_1.height = 3;              
               treef_1.position.x = Math.random() * (15) - 23;
               treef_1.position.z = Math.random() * 15  - 4;
-              treef_1.position.y = 3.8;
+              treef_1.position.y = 3.2;
               break;
             case i > 150 && i < 180:
               const treef_2 = new BABYLON.Sprite("tree", spritetree);
@@ -199,7 +199,7 @@
               treef_2.height = 3;              
               treef_2.position.x = Math.random() * (6) - 18;
               treef_2.position.z = Math.random() * 10  + 6;
-              treef_2.position.y = 3.8;
+              treef_2.position.y = 3.2;
               break;
             case i > 180 && i < 200:
               const treef_3 = new BABYLON.Sprite("tree", spritetree);
@@ -207,7 +207,7 @@
               treef_3.height = 3;              
               treef_3.position.x = Math.random() * (6) - 13;
               treef_3.position.z = Math.random() * 6  + 14;
-              treef_3.position.y = 3.8;
+              treef_3.position.y = 3.2;
               break;
             case i > 200 && i < 220:
               const treef_4 = new BABYLON.Sprite("tree", spritetree);
@@ -215,7 +215,7 @@
               treef_4.height = 3;              
               treef_4.position.x = Math.random() * (6) - 10;
               treef_4.position.z = Math.random() * 6  + 20;
-              treef_4.position.y = 3.8;
+              treef_4.position.y = 3.2;
               break;
             case i > 220 && i < 250:
               const treef_5 = new BABYLON.Sprite("tree", spritetree);
@@ -223,7 +223,7 @@
               treef_5.height = 3;              
               treef_5.position.x = Math.random() * (6) - 8;
               treef_5.position.z = Math.random() * 8  + 27;
-              treef_5.position.y = 3.8;
+              treef_5.position.y = 3.2;
               break;
             default:
               const tree = new BABYLON.Sprite("tree", spritetree);
@@ -231,15 +231,15 @@
               tree.height = 3;                 
               tree.position.x = Math.random() * (-5) + 19;
               tree.position.z = Math.random() * 8 + 27;
-              tree.position.y = 3.5;
+              tree.position.y = 3.2;
               break;
           }
         }
         
         // ランプを作成
         BABYLON.SceneLoader.ImportMeshAsync("", "", "lamp.babylon").then(() =>{
-          const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0.3, -1, 0), 0.7 * Math.PI, 0.01, scene);
-          lampLight.diffuse = BABYLON.Color3.Yellow();
+          const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0.4, -1, 0), 0.63 * Math.PI, 0.01, scene);
+          lampLight.diffuse = BABYLON.Color3.White();
           lampLight.parent = scene.getMeshByName("bulb")
 
           const lamp = scene.getMeshByName("lamp");
@@ -249,14 +249,13 @@
           lamp.position.x = 23;
           lamp.position.z = -27;
 
-          lamp3 = lamp.clone("lamp3");
-          lamp3.position.z = -20;
-          lamp3.position.x = 0;
-
           lamp1 = lamp.clone("lamp1");
-          lamp1.position.z = -12;
-          lamp1.position.x = -23;
+          lamp1.position.z = -20;
+          lamp1.position.x = 0;
 
+          lamp2 = lamp.clone("lamp2");
+          lamp2.position.z = -12;
+          lamp2.position.x = -23;
 
       });
 
