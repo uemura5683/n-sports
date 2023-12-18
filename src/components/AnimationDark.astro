@@ -1,10 +1,5 @@
 <canvas id="renderCanvas"></canvas>
 
-<div class="tw-absolute tw-z-[10] tw-p-[20px] tw-top-[0px] tw-right-[0px] tw-gap-[10px] tw-flex">
-  <a href="?night_dark=night" class="button tw-text-shadow-white" id="noon">Noon</a>
-  <a href="?night_dark=dark" type="button" class="button tw-text-shadow-white" id="night">Night</a>
-</div>
-
 <script is:inline src="https://preview.babylonjs.com/babylon.js"></script>
 <script is:inline src="https://cdn.babylonjs.com/materialsLibrary/babylon.gridMaterial.js"></script>
 <script is:inline src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
@@ -26,16 +21,7 @@
       camera.position = new BABYLON.Vector3(30, 30, 30);
       camera.attachControl(canvas, true);
 
-      const button_targets = document.getElementsByClassName('button');
-      for(let i = 0; i < button_targets.length; i++){
-        button_targets[i].addEventListener("click",(e) => {
-            night_dark(e.target.getAttribute('id'));
-        }, false);
-      }
-
       // 光源設定
-
-      // 夜
       const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
       spot.diffuse = new BABYLON.Color3(.7, .7, .7);
       spot.specular = new BABYLON.Color3(0, 0, 0);
@@ -53,7 +39,6 @@
       const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
             skyboxMaterial.backFaceCulling = false;
 
-            // 夜
             skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/sky_night/skybox", scene);
             skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 
