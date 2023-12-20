@@ -669,6 +669,10 @@ video {
   font-size: 36px;
 }
 
+.tw-text-\[48px\] {
+  font-size: 48px;
+}
+
 .tw-text-\[\#000000\] {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
