@@ -40,7 +40,7 @@
     function renderfunction(light_dark) {
 
       const loading = document.getElementById("js-loading");
-      loading.classList.remove('tw-hidden');
+            loading.classList.remove('tw-hidden');
 
       const canvas = document.getElementById('renderCanvas');
       const engine = new BABYLON.Engine(canvas);      
@@ -55,16 +55,16 @@
         // 光源設定
         if( light_dark == 'dark' ) {
             const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
-            spot.diffuse = new BABYLON.Color3(.7, .7, .7);
-            spot.specular = new BABYLON.Color3(0, 0, 0);
-            spot.position.y = 20;
-            spot.position.x = 45;
+                  spot.diffuse = new BABYLON.Color3(.7, .7, .7);
+                  spot.specular = new BABYLON.Color3(0, 0, 0);
+                  spot.position.y = 20;
+                  spot.position.x = 45;
 
             const moon = BABYLON.Mesh.CreateSphere("moon", 10, 4);
-            moon.material = new BABYLON.StandardMaterial("moon");
-            moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
-            moon.position.y = 20;
-            moon.position.x = 45;
+                  moon.material = new BABYLON.StandardMaterial("moon");
+                  moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
+                  moon.position.y = 20;
+                  moon.position.x = 45;
         } else {
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
                   light.intensity = .6;
@@ -76,11 +76,11 @@
               skyboxMaterial.backFaceCulling = false;
         const skyboxTexture = light_dark == 'dark' ? "textures/sky_dark/skybox" : "textures/sky/skybox";
 
-        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(skyboxTexture, scene);
-        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-        skybox.material = skyboxMaterial;
+              skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(skyboxTexture, scene);
+              skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+              skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+              skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+              skybox.material = skyboxMaterial;
 
         // グランドを作成
         const largeGroundMat = new BABYLON.StandardMaterial("largeGroundMat");
@@ -114,8 +114,8 @@
               tea_under.position.z = 24;
 
         const tea_under1 = tea_under.clone();
-        tea_under1.position.x = -23.5;
-        tea_under1.position.z = 28.5;      
+              tea_under1.position.x = -23.5;
+              tea_under1.position.z = 28.5;      
 
         // カップを作成
         const golfcup = BABYLON.MeshBuilder.CreateCylinder("golfcup", {height:1, depth:0.1});
@@ -130,21 +130,21 @@
               golfcup.rotation.x = degree(-3);
 
         // 水を作成
-        var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 20, 37, 10, scene, false);
-        var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
-            water.backFaceCulling = true;
-            water.bumpTexture = new BABYLON.Texture("textures/water/waterbump.png", scene);
-            water.windForce = -2;
-            water.waveHeight = 0.1;
-            water.bumpHeight = 0.1;
-            water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.2);
-            water.colorBlendFactor = 0.5;
-            water.addToRenderList(skybox);
-            water.addToRenderList(largeGround);
-            waterMesh.material = water;
-            waterMesh.position.x = 2.9;      
-            waterMesh.position.y = 1.8;
-            waterMesh.position.z = 16.5;   
+        const waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 20, 37, 10, scene, false);
+        const water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
+              water.backFaceCulling = true;
+              water.bumpTexture = new BABYLON.Texture("textures/water/waterbump.png", scene);
+              water.windForce = -2;
+              water.waveHeight = 0.1;
+              water.bumpHeight = 0.1;
+              water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.2);
+              water.colorBlendFactor = 0.5;
+              water.addToRenderList(skybox);
+              water.addToRenderList(largeGround);
+              waterMesh.material = water;
+              waterMesh.position.x = 2.9;      
+              waterMesh.position.y = 1.8;
+              waterMesh.position.z = 16.5;   
 
           // 木を作成
           const elementree = light_dark == 'dark' ? "textures/wood/wood_dark.png" : "textures/wood/wood.png";
@@ -258,8 +258,8 @@
             const lignts =  light_dark == 'dark' ? 0.63 : 0;
             const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0.25, -1, 0), lignts * Math.PI, 0.01, scene);
 
-            lampLight.diffuse = BABYLON.Color3.White();
-            lampLight.parent = scene.getMeshByName("bulb")
+                  lampLight.diffuse = BABYLON.Color3.White();
+                  lampLight.parent = scene.getMeshByName("bulb");
 
             const lamp = scene.getMeshByName("lamp");
                   lamp.position = new BABYLON.Vector3(2, 2, 2); 
@@ -285,7 +285,7 @@
             fountain.position.y = 2.3;
             fountain.position.z = 6.8;
 
-            var particleSystem = new BABYLON.ParticleSystem("particles", 5000, scene);
+            let particleSystem = new BABYLON.ParticleSystem("particles", 5000, scene);
 
             particleSystem.particleTexture = new BABYLON.Texture("textures/flare/flare.png", scene);
 
@@ -367,9 +367,8 @@
     z-index: 1000;
   }
   .circle-border {
-    animation: spin .8s linear 0s infinite
+    animation: spin .8s linear 0s infinite;
   }
-
   @-webkit-keyframes spin {
     0% {
       -webkit-transform: rotate(0);
