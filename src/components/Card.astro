@@ -10,13 +10,25 @@ interface Props {
 const { directory, href, title, body, image } = Astro.props;
 ---
 
-<li>
+<li class="cart-wrap-inner splide__slide">
 	<a href={href}>
 		<img
 			src={image}
 			alt={title}
 			decoding="auto"
+			class="tw-w-[100%]"
 		>
-		<p>{title}</p>
+		<p class="tw-top-[10px] tw-text-[14px] tw-text-shadow-white">{title}</p>
 	</a>
 </li>
+
+<style>
+  .cart-wrap-inner {
+	backdrop-filter: blur(10px);
+	padding: 2rem;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-right-color: rgba(255, 255, 255, 0.2);
+	border-bottom-color: rgba(255, 255, 255, 0.2);
+	border-radius: 5px;	
+  }
+</style>
