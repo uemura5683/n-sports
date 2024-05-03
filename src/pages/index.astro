@@ -1,6 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
 import Animation from '../components/Animation.astro';
+
+// blog
+import { getNublog } from "../../library/microcms";
+const resnublog = await getNublog({ fields: ["id", "title", "image", "date"] });
+
+import moment from "moment";
+let setdate = function (str:any) {
+  return moment(str).utc().format('YYYY-MM-DD');
+};
+
 ---
 
 <Layout title="N sports">
@@ -10,5 +21,34 @@ import Animation from '../components/Animation.astro';
 		</div>
 		<h1 class="tw-absolute tw-top-[50%] tw-left-[20%] tw-text-[48px] tw-text-shadow-white sm-max:tw-text-[24px]">N sports</h1>	
 		<Animation />	
+		<section aria-label="golf_slider">
+			<ul class="card-wrap tw-flex tw-flex-wrap tw-gap-[10px] tw-mr-[-10px] tw-z-[10] sm:tw-gap-[20px] sm:tw-mr-[0px]">
+				{
+					resnublog.contents.map((content: any) => (
+						<Card
+							href={content.link}
+							title={content.title}
+							image={content.image.url}
+							data={setdate(content.date)}
+						/>
+					))
+				}
+			</ul>
+		</section>
 	</main>
 </Layout>
+
+<style>
+  .card-wrap {
+	height: calc(100vh - 8rem);
+    overflow: scroll;
+    padding: 2rem;
+    top: 50%;
+    right: 15%;
+    transform: translate(0,-50%);
+    position: absolute;
+    width: 30%;
+    display: grid;
+    grid-template-columns: 100%;
+  }
+</style>
