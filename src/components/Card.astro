@@ -1,34 +1,153 @@
 ---
-interface Props {
-  directory: string;
-  title: string;
-  data: string;
-  href: string;
-  image: string;
-}
 
-const { directory, href, title, body, image } = Astro.props;
+// blog
+import { getNublog } from "../../library/microcms";
+const resnublog = await getNublog({ fields: ["id", "title", "image", "date"] });
+
+import moment from "moment";
+let setdate = function (str:any) {
+  return moment(str).utc().format('YYYY-MM-DD');
+};
+
+
 ---
 
-<li class="cart-wrap-inner splide__slide">
-	<a href={href}>
-		<img
-			src={image}
-			alt={title}
-			decoding="auto"
-			class="tw-w-[100%]"
-		>
-		<p class="tw-top-[10px] tw-text-[14px] tw-text-shadow-white">{title}</p>
-	</a>
-</li>
+<div class="tw-relative">
+  <div class="close_button tw-hidden">×</div>
+  <canvas id="renderCanvasBanner" class="tw-hidden"></canvas>
+</div>
+
+<section id="renderCard" aria-label="golf_slider">
+	<ul class="card-wrap tw-flex tw-flex-wrap tw-gap-[10px] tw-mr-[-10px] tw-z-[10] sm:tw-gap-[20px] sm:tw-mr-[0px]">
+		{
+			resnublog.contents.map((content: any) => (
+				<li class="cart-wrap-inner splide__slide">
+          <img
+            src={content.image.url}
+            alt={content.title}
+            decoding="auto"
+            class="tw-w-[100%]"
+          >
+				</li>				
+			))
+		}
+	</ul>
+</section>
+
+<script type="text/javascript">
+    const button_targets = document.querySelectorAll('.cart-wrap-inner');
+    for(let i = 0; i < button_targets.length; i++){
+      button_targets[i].addEventListener("click",(e) => {
+        if (e.target.tagName === 'IMG') {
+            const src = e.target.getAttribute('src');
+            document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
+            document.getElementById('renderCard').classList.add('tw-hidden');
+            document.querySelector('.close_button').classList.remove('tw-hidden');
+            mainbanner(src);
+        }
+      }, false);
+    }
+
+  document.querySelector('.close_button').addEventListener("click",(e) => { 
+    document.getElementById('renderCanvasBanner').classList.add('tw-hidden');
+    document.getElementById('renderCard').classList.remove('tw-hidden');
+    document.querySelector('.close_button').classList.add('tw-hidden');
+  });
+
+  function mainbanner(src) {
+
+    // バナーレンダリング
+    function bnrrenderfunction() {
+
+      const canvasbanner = document.getElementById('renderCanvasBanner');
+      const engine = new BABYLON.Engine(canvasbanner);  
+
+      const createScene = function () {
+        const scene = new BABYLON.Scene(engine);
+        scene.clearColor = new BABYLON.Color4(0,0,0,0); 
+
+        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 15, new BABYLON.Vector3(0, 0, 0));
+        camera.position = new BABYLON.Vector3(1, 1, 1);
+        camera.attachControl(canvasbanner, true);
+
+        // ライトを作成
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0));
+
+        // ブロックを作成
+        // マテリアルをセットする
+        const boxMat = new BABYLON.StandardMaterial("boxMat");
+
+        // ボックス型のジオメトリをセットする
+        const box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.7, width: 1, depth: .7, wrap: true});
+
+        // テクスチャをセットする
+        const get_render = document.querySelector('#renderCard li img');
+        const get_images = src !== null
+                ? src
+                : get_render.getAttribute('src');
+
+
+        if( get_images !== null )
+            boxMat.diffuseTexture = new BABYLON.Texture(get_images);
+            box.material = boxMat;
+            return scene;
+          };
+
+          const scene = createScene();
+          
+          engine.runRenderLoop(() => {
+            scene.render();
+          });
+          
+          window.addEventListener('resize', () => {
+            engine.resize();
+          });
+        }
+
+    bnrrenderfunction();
+
+  }
+  window.addEventListener('DOMContentLoaded', mainbanner);
+</script>
+
 
 <style>
+  #renderCanvasBanner {
+    position: fixed;
+    width: 50%;
+    height: 90vh;
+    top: 50%;
+    left: 100%;
+    transform: translate(-100%, -50%);
+  }
+  .card-wrap {
+	  height: calc(100vh - 8rem);
+    overflow: scroll;
+    padding: 2rem;
+    top: 50%;
+    right: 15%;
+    transform: translate(0,-50%);
+    position: absolute;
+    width: 30%;
+    display: grid;
+    grid-template-columns: 100%;
+  }
   .cart-wrap-inner {
-	backdrop-filter: blur(10px);
-	padding: 2rem;
-	border: 1px solid rgba(255, 255, 255, 0.4);
-	border-right-color: rgba(255, 255, 255, 0.2);
-	border-bottom-color: rgba(255, 255, 255, 0.2);
-	border-radius: 5px;	
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-right-color: rgba(255, 255, 255, 0.2);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;	
+  }
+  .close_button {
+    position: fixed;
+    top: 10vh;
+    right: 50px;
+    width: 30px;
+    font-size: 50px;
+    line-height: 30px;
+    cursor: pointer;
+    z-index: 10;
   }
 </style>
