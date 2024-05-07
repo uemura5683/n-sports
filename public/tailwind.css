@@ -572,10 +572,6 @@ video {
   top: 0px;
 }
 
-.tw-top-\[10px\] {
-  top: 10px;
-}
-
 .tw-top-\[50\%\] {
   top: 50%;
 }
@@ -675,12 +671,45 @@ video {
   padding: 3px;
 }
 
-.tw-text-\[14px\] {
-  font-size: 14px;
+.tw-py-\[20px\] {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.tw-px-\[10px\] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.tw-px-\[20px\] {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.tw-py-\[10px\] {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.tw-py-\[25px\] {
+  padding-top: 25px;
+  padding-bottom: 25px;
 }
 
 .tw-text-\[48px\] {
   font-size: 48px;
+}
+
+.tw-text-\[24px\] {
+  font-size: 24px;
+}
+
+.tw-text-\[236px\] {
+  font-size: 236px;
+}
+
+.tw-text-\[36px\] {
+  font-size: 36px;
 }
 
 .tw-text-\[\#000000\] {
