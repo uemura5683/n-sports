@@ -9,7 +9,6 @@ let setdate = function (str:any) {
   return moment(str).utc().format('YYYY-MM-DD');
 };
 
-
 ---
 
 <div class="tw-relative">
@@ -23,6 +22,8 @@ let setdate = function (str:any) {
 			resnublog.contents.map((content: any) => (
 				<li class="cart-wrap-inner splide__slide">
           <img
+            data-width-x={content.image.width}
+            data-width-y={content.image.height}
             src={content.image.url}
             alt={content.title}
             decoding="auto"
@@ -107,7 +108,7 @@ let setdate = function (str:any) {
     bnrrenderfunction();
 
   }
-  window.addEventListener('DOMContentLoaded', mainbanner);
+  window.addEventListener('DOMContentLoaded', mainbanner());
 </script>
 
 
@@ -115,8 +116,8 @@ let setdate = function (str:any) {
   #renderCanvasBanner {
     position: fixed;
     width: 100%;
-    height: calc(100vh - 74px);
-    top: 74px;
+    height: 100vh;
+    top: 0;
     left: 100%;
     transform: translate(-100%, 0);
   }
@@ -125,8 +126,8 @@ let setdate = function (str:any) {
     overflow: scroll;
     padding: 2rem;
     top: 50%;
-    right: 15%;
-    transform: translate(0,-50%);
+    right: 50%;
+    transform: translate(50%,-50%);
     position: absolute;
     width: 30%;
     display: grid;
