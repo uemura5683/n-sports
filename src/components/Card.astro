@@ -41,10 +41,12 @@ let setdate = function (str:any) {
       button_targets[i].addEventListener("click",(e) => {
         if (e.target.tagName === 'IMG') {
             const src = e.target.getAttribute('src');
+            const width = e.target.getAttribute('data-width-x');
+            const height = e.target.getAttribute('data-width-y');
             document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
             document.getElementById('renderCard').classList.add('tw-hidden');
             document.querySelector('.close_button').classList.remove('tw-hidden');
-            mainbanner(src);
+            mainbanner(src, width, height);
         }
       }, false);
     }
@@ -55,7 +57,7 @@ let setdate = function (str:any) {
     document.querySelector('.close_button').classList.add('tw-hidden');
   });
 
-  function mainbanner(src) {
+  function mainbanner(src, width, height) {
 
     // バナーレンダリング
     function bnrrenderfunction() {
@@ -67,19 +69,46 @@ let setdate = function (str:any) {
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
-        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 15, new BABYLON.Vector3(0, 0, 0));
+        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2, 15, new BABYLON.Vector3(0, 0, 0));
         camera.position = new BABYLON.Vector3(1, 1, 1);
         camera.attachControl(canvasbanner, true);
 
         // ライトを作成
-        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0));
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 1));
+              light.intensity = 1;
 
         // ブロックを作成
         // マテリアルをセットする
         const boxMat = new BABYLON.StandardMaterial("boxMat");
 
         // ボックス型のジオメトリをセットする
-        const box = BABYLON.MeshBuilder.CreateBox("box", {height: 0.7, width: 1, depth: .7, wrap: true});
+        console.log(String(width).length);
+        console.log(String(height).length);
+        
+        switch(true) {
+          case String(width).length === 5 || String(height).length === 5:
+            var wfix = width / 10000;
+            var hfix = height / 10000;
+            break;          
+          case String(width).length === 4 || String(height).length === 4:
+            var wfix = width / 1000;
+            var hfix = height / 1000;
+            break;
+          case String(width).length === 3 || String(height).length === 3:
+            var wfix = width / 100;
+            var hfix = height / 100;            
+            break;
+          case String(width).length === 2 || String(height).length === 2:
+            var wfix = width / 10;
+            var hfix = height / 10;
+            break;  
+          default:
+            var wfix = width;
+            var hfix = height;
+            break;  
+        }
+
+        const box = BABYLON.MeshBuilder.CreateBox("box", {height: hfix, width: wfix, depth: 0.01, wrap: true});
 
         // テクスチャをセットする
         const get_render = document.querySelector('#renderCard li img');
