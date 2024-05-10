@@ -1,8 +1,8 @@
 ---
 
 // blog
-import { getNublog } from "../../library/microcms";
-const resnublog = await getNublog({ fields: ["id", "title", "image", "date"] });
+import { getNsports } from "../../library/microcms";
+const resnublog = await getNsports({ fields: ["id", "title", "image", "date"] });
 
 import moment from "moment";
 let setdate = function (str:any) {
@@ -84,7 +84,7 @@ let setdate = function (str:any) {
         // ボックス型のジオメトリをセットする
         console.log(String(width).length);
         console.log(String(height).length);
-        
+
         switch(true) {
           case String(width).length === 5 || String(height).length === 5:
             var wfix = width / 10000;
@@ -169,6 +169,7 @@ let setdate = function (str:any) {
     border-right-color: rgba(255, 255, 255, 0.2);
     border-bottom-color: rgba(255, 255, 255, 0.2);
     border-radius: 5px;	
+    cursor: pointer;
   }
   .close_button {
     position: fixed;

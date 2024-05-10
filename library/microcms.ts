@@ -24,17 +24,7 @@ export type BlogResponse = {
   contents: Blog[];
 };
 
-// nu-blogの呼び出し
-export const getNublog = async (queries?: MicroCMSQueries) => {
+// n-sportsの呼び出し
+export const getNsports = async (queries?: MicroCMSQueries) => {
   return await nu_client.get<BlogResponse>({ endpoint: "golf", queries: { limit: 99 } });
-};
-export const getNublogDetai = async (
-  contentId: string,
-  queries?: MicroCMSQueries
-) => {
-  return await nu_client.getListDetail<Blog>({
-    endpoint: "golf",
-    contentId,
-    queries,
-  });
 };

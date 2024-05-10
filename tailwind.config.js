@@ -30,7 +30,7 @@ module.exports = {
     function({ addUtilities }) {
       const newUtilities = {
         ".text-shadow-white": {
-          textShadow: "0px 0px 5px white"
+          textShadow: "0px 0px 5px white, 0px 0px 5px white"
         }
       };
 
