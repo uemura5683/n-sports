@@ -69,12 +69,12 @@ let setdate = function (str:any) {
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
-        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2, 15, new BABYLON.Vector3(0, 0, 0));
-        camera.position = new BABYLON.Vector3(1, 1, 1);
+        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2, 10, new BABYLON.Vector3(0, 0, 0));
+        camera.position = new BABYLON.Vector3(0.18, 0.18, 1.8);
         camera.attachControl(canvasbanner, true);
 
         // ライトを作成
-        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 1));
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 0, 1), scene);
               light.intensity = 1;
 
         // ブロックを作成
