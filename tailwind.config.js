@@ -9,12 +9,6 @@ module.exports = {
     "src/pages/*/*.astro",
   ],
   theme: {
-    backgroundSize: {
-      'auto': 'auto',
-      'cover': 'cover',
-      'contain': 'contain',
-      '100%': '100%',
-    },
     extend: {
       screens: {
         'sm': {'min': '768px'},
@@ -33,7 +27,6 @@ module.exports = {
           textShadow: "0px 0px 5px white, 0px 0px 5px white"
         }
       };
-
       addUtilities(newUtilities);
     }
   ],

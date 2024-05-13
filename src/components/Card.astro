@@ -74,46 +74,39 @@ let setdate = function (str:any) {
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
-        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2, 10, new BABYLON.Vector3(0, 0, 0));
-        camera.position = new BABYLON.Vector3(0.18, 0.18, 1.8);
-        camera.attachControl(canvasbanner, true);
+        const camera2 = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2, Math.PI / 2, 10, BABYLON.Vector3.Zero(), scene);
+
+        camera2.attachControl(canvasbanner, true);
 
         // ライトを作成
-        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 0, 1), scene);
-              light.intensity = 1;
-
+        const light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+        const light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
+      
         // ブロックを作成
         // マテリアルをセットする
         const boxMat = new BABYLON.StandardMaterial("boxMat");
 
         // ボックス型のジオメトリをセットする
-        console.log(String(width).length);
-        console.log(String(height).length);
-
         switch(true) {
           case String(width).length === 5 || String(height).length === 5:
-            var wfix = width / 10000;
-            var hfix = height / 10000;
+            var wfix = width / 1500;
+            var hfix = height / 1500;
             break;          
           case String(width).length === 4 || String(height).length === 4:
-            var wfix = width / 1000;
-            var hfix = height / 1000;
+            var wfix = width / 150;
+            var hfix = height / 150;
             break;
           case String(width).length === 3 || String(height).length === 3:
-            var wfix = width / 100;
-            var hfix = height / 100;            
+            var wfix = width / 15;
+            var hfix = height / 15;            
             break;
-          case String(width).length === 2 || String(height).length === 2:
-            var wfix = width / 10;
-            var hfix = height / 10;
-            break;  
           default:
             var wfix = width;
             var hfix = height;
             break;  
         }
 
-        const box = BABYLON.MeshBuilder.CreateBox("box", {height: hfix, width: wfix, depth: 0.01, wrap: true});
+        const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
 
         // テクスチャをセットする
         const get_render = document.querySelector('#renderCard li img');
