@@ -18,6 +18,12 @@ let setdate = function (str:any) {
       <line y1="-1" x2="35.3553" y2="-1" transform="matrix(0.707108 -0.707106 0.707108 0.707106 2.31006 27.3096)" stroke="black" stroke-width="2"/>
     </svg>
   </div>
+  <canvas
+    id="renderCanvasList"
+    data-blog={resnublog.contents.map((content: any) => '[' + content.image.url + '|' + content.image.width + '|' + content.image.height  + '|' + content.title + ']')}
+    class="tw-hidden"
+  >
+  </canvas>  
   <canvas id="renderCanvasBanner" class="tw-hidden"></canvas>
 </div>
 
@@ -62,6 +68,15 @@ let setdate = function (str:any) {
     document.querySelector('.close_button').classList.add('tw-hidden');
   });
 
+  function bannerlist() {
+    const canvasblog = document.getElementById('renderCanvasList');
+    const canvaslist = canvasblog.dataset.blog;
+    console.log(canvaslist.split(','));
+  }
+
+  bannerlist();
+
+
   function mainbanner(src, width, height) {
 
     // バナーレンダリング
@@ -74,14 +89,16 @@ let setdate = function (str:any) {
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
-        const camera2 = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2, Math.PI / 2, 10, BABYLON.Vector3.Zero(), scene);
+        const camera2 = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 18, BABYLON.Vector3.Zero(), scene);
 
         camera2.attachControl(canvasbanner, true);
 
         // ライトを作成
-        const light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
-        const light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
-      
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+        light.diffuse = new BABYLON.Color3(1, 1, 1);
+        light.specular = new BABYLON.Color3(1, 1, 1);
+        light.groundColor = new BABYLON.Color3(1, 1, 1);      
+
         // ブロックを作成
         // マテリアルをセットする
         const boxMat = new BABYLON.StandardMaterial("boxMat");
@@ -89,16 +106,16 @@ let setdate = function (str:any) {
         // ボックス型のジオメトリをセットする
         switch(true) {
           case String(width).length === 5 || String(height).length === 5:
-            var wfix = width / 1500;
-            var hfix = height / 1500;
+            var wfix = width / 1000;
+            var hfix = height / 1000;
             break;          
           case String(width).length === 4 || String(height).length === 4:
-            var wfix = width / 150;
-            var hfix = height / 150;
+            var wfix = width / 100;
+            var hfix = height / 100;
             break;
           case String(width).length === 3 || String(height).length === 3:
-            var wfix = width / 15;
-            var hfix = height / 15;            
+            var wfix = width / 10;
+            var hfix = height / 10;            
             break;
           default:
             var wfix = width;
@@ -144,9 +161,9 @@ let setdate = function (str:any) {
     position: fixed;
     width: 100%;
     height: 100vh;
-    top: 0;
-    left: 100%;
-    transform: translate(-100%, 0);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     animation: fadein 0.5s ease-in-out 0s infinite;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
@@ -154,15 +171,15 @@ let setdate = function (str:any) {
   }
   @keyframes fadein {
     0% {
-        transform: translate(-100%, 0) scale(0);
+        transform: translate(-50%, -50%) scale(0);
         opacity: 0;
     }
     80% {
-        transform: translate(-100%, 0) scale(1.1);
+        transform: translate(-50%, -50%) scale(1.1);
         opacity: 0.8;
     }    
     100% {
-        transform: translate(-100%, 0) scale(1);
+        transform: translate(-50%, -50%) scale(1);
         opacity: 1;
     }
   }
@@ -199,6 +216,8 @@ let setdate = function (str:any) {
     z-index: 10;
   }
   .close_button line {
-    filter: drop-shadow(0px 0px 1px #ffffff) drop-shadow(0px 0px 1px #ffffff);
+    filter:
+      drop-shadow(0px 0px 1px #ffffff)
+      drop-shadow(0px 0px 1px #ffffff);
   }
 </style>
