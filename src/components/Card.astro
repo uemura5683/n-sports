@@ -47,26 +47,31 @@ let setdate = function (str:any) {
 </section>
 
 <script type="text/javascript">
-    const button_targets = document.querySelectorAll('.cart-wrap-inner');
-    for(let i = 0; i < button_targets.length; i++){
-      button_targets[i].addEventListener("click",(e) => {
-        if (e.target.tagName === 'IMG') {
-            const src = e.target.getAttribute('src');
-            const width = e.target.getAttribute('data-width-x');
-            const height = e.target.getAttribute('data-width-y');
-            document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
-            document.getElementById('renderCard').classList.add('tw-hidden');
-            document.querySelector('.close_button').classList.remove('tw-hidden');
-            mainbanner(src, width, height);
-        }
-      }, false);
-    }
+  const button_targets = document.querySelectorAll('.cart-wrap-inner');
+  for(let i = 0; i < button_targets.length; i++){
+    button_targets[i].addEventListener("click",(e) => {
+      if (e.target.tagName === 'IMG') {
+          const src = e.target.getAttribute('src');
+          const width = e.target.getAttribute('data-width-x');
+          const height = e.target.getAttribute('data-width-y');
+          document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
+          document.getElementById('renderCard').classList.add('tw-hidden');
+          document.querySelector('.close_button').classList.remove('tw-hidden');
+          mainbanner(src, width, height);
+      }
+    }, false);
+  }
 
   document.querySelector('.close_button').addEventListener("click",(e) => { 
     document.getElementById('renderCanvasBanner').classList.add('tw-hidden');
     document.getElementById('renderCard').classList.remove('tw-hidden');
     document.querySelector('.close_button').classList.add('tw-hidden');
   });
+
+  function degree(degrees) {
+    return degrees * (Math.PI / 180);
+  }
+
 
   function bannerlist() {
     const canvasblog = document.getElementById('renderCanvasList');
@@ -77,7 +82,7 @@ let setdate = function (str:any) {
 
         const canvaslist = canvasblog.dataset.blog;
         const canvaslistsplit = canvaslist.split(',');
-        
+
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
@@ -98,35 +103,21 @@ let setdate = function (str:any) {
 
           value_split = value.split('|');
 
-          // ボックス型のジオメトリをセットする
-          switch(true) {
-            case String(value_split[1]).length === 5 || String(value_split[2]).length === 5:
-              var wfix = value_split[1] / 2000;
-              var hfix = value_split[2] / 1000;
-              break;          
-            case String(value_split[1]).length === 4 || String(value_split[2]).length === 4:
-              var wfix = value_split[1] / 200;
-              var hfix = value_split[2] / 200;
-              break;
-            case String(value_split[1]).length === 3 || String(value_split[2]).length === 3:
-              var wfix = value_split[1] / 20;
-              var hfix = value_split[2] / 20;            
-              break;
-            default:
-              var wfix = value_split[1] / 2;
-              var hfix = value_split[2] / 2;
-              break;  
-          }
+          // 比率を計算する
+          hfix =  ( 7 * value_split[2] ) / value_split[1];
+          wfix =  7;
 
           const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
-          // box.rotation.x = Math.cos(index);
+          box.rotation.y = degree( index * 60 );
 
+          box.position.x = 7 * Math.sin( degree( index * 60 ) );
+          box.position.y = 0;
+          box.position.z = 7 * Math.cos( degree( index * 60 ) );
+
+          //　テクスチャをはる
           boxMat.diffuseTexture = new BABYLON.Texture(value_split[0]);
-
-
           box.material = boxMat;
 
-          console.log(box);
         });
 
         return scene;
