@@ -11,3 +11,5 @@ https://developers.google.com/photos/library/guides/get-started?hl=ja
 https://eguweb.jp/gas/46010/
 
 https://codepen.io/uemuragame5683/pen/YzWGEKv
+
+https://doc.babylonjs.com/features/featuresDeepDive/events/actions

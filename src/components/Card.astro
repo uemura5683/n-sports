@@ -21,13 +21,12 @@ let setdate = function (str:any) {
   <canvas
     id="renderCanvasList"
     data-blog={resnublog.contents.map((content: any) => content.image.url + '|' + content.image.width + '|' + content.image.height  + '|' + content.title)}
-    class="tw-hidden"
   >
   </canvas>  
   <canvas id="renderCanvasBanner" class="tw-hidden"></canvas>
 </div>
 
-<section id="renderCard" aria-label="golf_slider">
+<section id="renderCard" aria-label="golf_slider" class="tw-hidden">
 	<ul class="card-wrap tw-flex tw-flex-wrap tw-gap-[10px] tw-mr-[-10px] tw-z-[10] sm:tw-gap-[20px] sm:tw-mr-[0px]">
 		{
 			resnublog.contents.map( (content: any) => (
@@ -64,7 +63,7 @@ let setdate = function (str:any) {
 
   document.querySelector('.close_button').addEventListener("click",(e) => { 
     document.getElementById('renderCanvasBanner').classList.add('tw-hidden');
-    document.getElementById('renderCard').classList.remove('tw-hidden');
+    document.getElementById('renderCanvasList').classList.remove('tw-hidden');
     document.querySelector('.close_button').classList.add('tw-hidden');
   });
 
@@ -89,6 +88,9 @@ let setdate = function (str:any) {
         const camera3 = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 18, BABYLON.Vector3.Zero(), scene);
 
         camera3.attachControl(canvasblog, true);
+
+        camera3.useAutoRotationBehavior = true;
+        camera3.autoRotationBehavior.idleRotationSpeed = Math.PI * 10 / 180;  
 
         // ライトを作成
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
@@ -117,6 +119,21 @@ let setdate = function (str:any) {
           //　テクスチャをはる
           boxMat.diffuseTexture = new BABYLON.Texture(value_split[0]);
           box.material = boxMat;
+
+          // クリックイベントを作る
+          box.actionManager = new BABYLON.ActionManager(scene);
+          box.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnDoublePickTrigger, function () {
+            const target = canvaslistsplit[index];
+            target_split = target.split('|');
+
+            document.getElementById('renderCanvasList').classList.add('tw-hidden');
+            document.getElementById('renderCard').classList.add('tw-hidden');
+
+            document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
+            document.querySelector('.close_button').classList.remove('tw-hidden');
+            mainbanner(target_split[0], target_split[1], target_split[2]);
+          }));
+
 
         });
 
