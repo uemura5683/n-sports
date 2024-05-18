@@ -26,25 +26,6 @@ let setdate = function (str:any) {
   <canvas id="renderCanvasBanner" class="tw-hidden"></canvas>
 </div>
 
-<section id="renderCard" aria-label="golf_slider" class="tw-hidden">
-	<ul class="card-wrap tw-flex tw-flex-wrap tw-gap-[10px] tw-mr-[-10px] tw-z-[10] sm:tw-gap-[20px] sm:tw-mr-[0px]">
-		{
-			resnublog.contents.map( (content: any) => (
-				<li class="cart-wrap-inner splide__slide">
-          <img
-            data-width-x={content.image.width}
-            data-width-y={content.image.height}
-            src={content.image.url}
-            alt={content.title}
-            decoding="auto"
-            class="tw-w-[100%]"
-          >
-				</li>				
-			) )
-		}
-	</ul>
-</section>
-
 <script type="text/javascript">
   const button_targets = document.querySelectorAll('.cart-wrap-inner');
   for(let i = 0; i < button_targets.length; i++){
@@ -54,7 +35,6 @@ let setdate = function (str:any) {
           const width = e.target.getAttribute('data-width-x');
           const height = e.target.getAttribute('data-width-y');
           document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
-          document.getElementById('renderCard').classList.add('tw-hidden');
           document.querySelector('.close_button').classList.remove('tw-hidden');
           mainbanner(src, width, height);
       }
@@ -71,26 +51,21 @@ let setdate = function (str:any) {
     return degrees * (Math.PI / 180);
   }
 
-
   function bannerlist() {
     const canvasblog = document.getElementById('renderCanvasList');
-
     const engine = new BABYLON.Engine(canvasblog);  
 
     const createScene = function () {
 
-        const canvaslist = canvasblog.dataset.blog;
-        const canvaslistsplit = canvaslist.split(',');
-
+        // シーンを作成
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
-        const camera3 = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 18, BABYLON.Vector3.Zero(), scene);
-
-        camera3.attachControl(canvasblog, true);
-
-        camera3.useAutoRotationBehavior = true;
-        camera3.autoRotationBehavior.idleRotationSpeed = Math.PI * 10 / 180;  
+        // カメラを作成
+        const camera = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 20, BABYLON.Vector3.Zero(), scene);
+        camera.attachControl(canvasblog, true);
+        camera.useAutoRotationBehavior = true;
+        camera.autoRotationBehavior.idleRotationSpeed = Math.PI * 10 / 180;  
 
         // ライトを作成
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
@@ -98,8 +73,9 @@ let setdate = function (str:any) {
         light.specular = new BABYLON.Color3(1, 1, 1);
         light.groundColor = new BABYLON.Color3(1, 1, 1);
 
-        // ブロックを作成
-        // マテリアルをセットする
+        // ギャラリーリストを作成
+        const canvaslist = canvasblog.dataset.blog;
+        const canvaslistsplit = canvaslist.split(',');
         canvaslistsplit.forEach(function( value, index ) {
           const boxMat = new BABYLON.StandardMaterial("boxMat");
 
@@ -112,9 +88,9 @@ let setdate = function (str:any) {
           const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
           box.rotation.y = degree( index * 60 );
 
-          box.position.x = 7 * Math.sin( degree( index * 60 ) );
+          box.position.x = - ( 7 * Math.sin( degree( index * 60 ) ) );
           box.position.y = 0;
-          box.position.z = 7 * Math.cos( degree( index * 60 ) );
+          box.position.z = - ( 7 * Math.cos( degree( index * 60 ) ) );
 
           //　テクスチャをはる
           boxMat.diffuseTexture = new BABYLON.Texture(value_split[0]);
@@ -127,7 +103,6 @@ let setdate = function (str:any) {
             target_split = target.split('|');
 
             document.getElementById('renderCanvasList').classList.add('tw-hidden');
-            document.getElementById('renderCard').classList.add('tw-hidden');
 
             document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
             document.querySelector('.close_button').classList.remove('tw-hidden');
@@ -152,7 +127,6 @@ let setdate = function (str:any) {
     });
 
   }
-
   bannerlist();
 
   function mainbanner(src, width, height) {
@@ -164,12 +138,14 @@ let setdate = function (str:any) {
       const engine = new BABYLON.Engine(canvasbanner);  
 
       const createScene = function () {
+
+        // シーンを作成
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
-        const camera2 = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 18, BABYLON.Vector3.Zero(), scene);
-
-        camera2.attachControl(canvasbanner, true);
+        // カメラを作成
+        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2,  Math.PI / 2, 18, BABYLON.Vector3.Zero(), scene);
+        camera.attachControl(canvasbanner, true);
 
         // ライトを作成
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
@@ -200,22 +176,14 @@ let setdate = function (str:any) {
             var hfix = height;
             break;  
         }
-
         const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
 
         // テクスチャをセットする
-        const get_render = document.querySelector('#renderCard li img');
-        const get_images = src !== null
-                ? src
-                : get_render.getAttribute('src');
-
-
-        if( get_images !== null ) {
-            boxMat.diffuseTexture = new BABYLON.Texture(get_images);
+        if( src !== null ) {
+            boxMat.diffuseTexture = new BABYLON.Texture(src);
             box.material = boxMat;
             return scene;
         }
-
       };
 
       const scene = createScene();
@@ -237,10 +205,10 @@ let setdate = function (str:any) {
   #renderCanvasList {
     position: fixed;
     width: 100%;
-    height: 100vh;
+    height: auto;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 100%;
+    transform: translate(-100%, -50%);
   }
   #renderCanvasBanner {
     position: fixed;
