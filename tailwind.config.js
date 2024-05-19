@@ -22,8 +22,11 @@ module.exports = {
     function({ addUtilities }) {
       const newUtilities = {
         ".text-shadow-white": {
-          textShadow: "0px 0px 5px white, 0px 0px 5px white"
-        }
+          textShadow: "0px 0px 5px white, 0px 0px 5px white",
+        },
+        ".filter-drow-shadow": {
+          filter: "drop-shadow(0px 0px 1px #fff) drop-shadow(0px 0px 1px #fff)",
+        },
       };
       addUtilities(newUtilities);
     }

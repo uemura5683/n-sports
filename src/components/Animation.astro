@@ -1,24 +1,32 @@
 <canvas id="renderCanvas"></canvas>
 
-<div class="tw-absolute tw-z-[10] tw-px-[20px] tw-py-[25px] tw-top-[0px] tw-right-[0px] tw-gap-[10px] tw-flex">
-  <button type="button" class="button tw-text-shadow-white" id="light">Light</button>
-  <button type="button" class="button tw-text-shadow-white" id="dark">Dark</button>
-</div>
-
 <script type="text/javascript">
   function main() {
     function degree(degrees) {
       return degrees * (Math.PI / 180);
     }
-    const button_targets = document.getElementsByClassName('button');
-    for(let i = 0; i < button_targets.length; i++){
-      button_targets[i].addEventListener("click",(e) => {
+    
+    const mode_switch = document.getElementsByClassName('js-mode-button');
+    for(let i = 0; i < mode_switch.length; i++){
+      mode_switch[i].addEventListener("click",(e) => {
         light_dark(e.target.getAttribute('id'));
       }, false);
     }
 
     // ライトモード・ダークモード切り替えスイッチ
     function light_dark(target) {
+      if( target === 'dark' ) {
+        document.getElementById('light').classList.add('tw-opacity-50');        
+        document.getElementById('light').classList.remove('filter-drow-shadow');
+        document.getElementById('dark').classList.add('filter-drow-shadow');
+        document.getElementById('dark').classList.remove('tw-opacity-50');
+      } else {
+        document.getElementById('light').classList.add('filter-drow-shadow');        
+        document.getElementById('light').classList.remove('tw-opacity-50');
+        document.getElementById('dark').classList.add('tw-opacity-50');
+        document.getElementById('dark').classList.remove('filter-drow-shadow');
+      }
+      
       const canvas = document.getElementById('renderCanvas');
             canvas.remove();
       const canvas_element = document.createElement('canvas');

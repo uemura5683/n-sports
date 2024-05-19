@@ -27,6 +27,27 @@ let setdate = function (str:any) {
 </div>
 
 <script type="text/javascript">
+
+  const caroucel_button = document.getElementsByClassName('js-caroucel-button');
+  for(let i = 0; i < caroucel_button.length; i++){
+    caroucel_button[i].addEventListener("click",(e) => {
+      console.log(e.target.getAttribute('id'));
+      if( e.target.getAttribute('id') === 'background_switch' ) {
+          document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
+          document.getElementById('caoucel_switch').classList.remove('filter-drow-shadow');
+          document.getElementById('background_switch').classList.remove('tw-opacity-50')
+          document.getElementById('background_switch').classList.add('filter-drow-shadow');
+          document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
+      } else {
+          document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
+          document.getElementById('caoucel_switch').classList.add('filter-drow-shadow');
+          document.getElementById('background_switch').classList.add('tw-opacity-50')
+          document.getElementById('background_switch').classList.remove('filter-drow-shadow');
+          document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
+      }
+    }, false);
+  }
+
   const button_targets = document.querySelectorAll('.cart-wrap-inner');
   for(let i = 0; i < button_targets.length; i++){
     button_targets[i].addEventListener("click",(e) => {
@@ -82,15 +103,15 @@ let setdate = function (str:any) {
           value_split = value.split('|');
 
           // 比率を計算する
-          hfix =  ( 7 * value_split[2] ) / value_split[1];
-          wfix =  7;
+          hfix =  ( ( canvaslistsplit.length / 2.5 ) * value_split[2] ) / value_split[1];
+          wfix =  canvaslistsplit.length / 2.5;
 
           const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
-          box.rotation.y = degree( index * 60 );
+          box.rotation.y = degree( index * ( 360 / canvaslistsplit.length ) );
 
-          box.position.x = - ( 7 * Math.sin( degree( index * 60 ) ) );
+          box.position.x = - ( canvaslistsplit.length / 1.2 * Math.sin( degree( index * ( 360 / canvaslistsplit.length ) ) ) );
           box.position.y = 0;
-          box.position.z = - ( 7 * Math.cos( degree( index * 60 ) ) );
+          box.position.z = - ( canvaslistsplit.length / 1.2 * Math.cos( degree( index * ( 360 / canvaslistsplit.length ) ) ) );
 
           //　テクスチャをはる
           boxMat.diffuseTexture = new BABYLON.Texture(value_split[0]);
@@ -108,26 +129,18 @@ let setdate = function (str:any) {
             document.querySelector('.close_button').classList.remove('tw-hidden');
             mainbanner(target_split[0], target_split[1], target_split[2]);
           }));
-
-
         });
-
         return scene;
-
     }
-
     const scene = createScene();
-    
     engine.runRenderLoop(() => {
       scene.render();
     });
-    
     window.addEventListener('resize', () => {
       engine.resize();
     });
-
   }
-  bannerlist();
+  window.addEventListener('DOMContentLoaded', bannerlist());
 
   function mainbanner(src, width, height) {
 
@@ -198,7 +211,6 @@ let setdate = function (str:any) {
     }
     bnrrenderfunction();
   }
-  window.addEventListener('DOMContentLoaded', mainbanner());
 </script>
 
 <style>
@@ -237,27 +249,6 @@ let setdate = function (str:any) {
     }
   }
 
-  .card-wrap {
-	  height: calc(100vh - 8rem);
-    overflow: scroll;
-    padding: 2rem;
-    top: 50%;
-    right: 0%;
-    transform: translate(0%,-50%);
-    position: absolute;
-    width: 30%;
-    display: grid;
-    grid-template-columns: 100%;
-  }
-  .cart-wrap-inner {
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border: 1px solid rgb(255 255 255 / 0.4);
-    border-right-color: rgb(255 255 255 / 0.2);
-    border-bottom-color: rgb(255 255 255 / 0.2);
-    border-radius: 5px;	
-    cursor: pointer;
-  }
   .close_button {
     position: fixed;
     top: 74px;
