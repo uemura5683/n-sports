@@ -34,16 +34,18 @@ let setdate = function (str:any) {
       console.log(e.target.getAttribute('id'));
       if( e.target.getAttribute('id') === 'background_switch' ) {
           document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
-          document.getElementById('caoucel_switch').classList.remove('filter-drow-shadow');
+          document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
           document.getElementById('background_switch').classList.remove('tw-opacity-50')
-          document.getElementById('background_switch').classList.add('filter-drow-shadow');
+          document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
           document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
+          document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');
       } else {
           document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
-          document.getElementById('caoucel_switch').classList.add('filter-drow-shadow');
+          document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
           document.getElementById('background_switch').classList.add('tw-opacity-50')
-          document.getElementById('background_switch').classList.remove('filter-drow-shadow');
+          document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
           document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
+          document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');
       }
     }, false);
   }
