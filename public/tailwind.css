@@ -544,6 +544,10 @@ video {
   pointer-events: none;
 }
 
+.tw-fixed {
+  position: fixed;
+}
+
 .tw-absolute {
   position: absolute;
 }
@@ -574,6 +578,10 @@ video {
 
 .tw-top-\[calc\(50\%_-_40px\)\] {
   top: calc(50% - 40px);
+}
+
+.tw-z-\[1000\] {
+  z-index: 1000;
 }
 
 .tw-z-\[10\] {
@@ -622,6 +630,10 @@ video {
 
 .tw-w-\[80px\] {
   width: 80px;
+}
+
+.tw-touch-none {
+  touch-action: none;
 }
 
 .tw-flex-wrap {
@@ -708,6 +720,14 @@ video {
 
 .tw-loading-animation {
   animation: loading-animation .8s linear 0s infinite;
+}
+
+.tw-rendercanvas {
+  width: 100%;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  -touch-event: none;
 }
 
 @media (max-width: 767px) {

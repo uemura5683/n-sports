@@ -20,9 +20,10 @@ let setdate = function (str:any) {
   </div>
   <canvas
     id="renderCanvasList"
+    class="tw-fixed tw-w-[100%] tw-h-[100%] tw-top-[0px] tw-left-[0px]"
     data-blog={resnublog.contents.map((content: any) => content.image.url + '|' + content.image.width + '|' + content.image.height  + '|' + content.title)}
   >
-  </canvas>  
+  </canvas> 
   <canvas id="renderCanvasBanner" class="tw-hidden"></canvas>
 </div>
 
@@ -31,7 +32,6 @@ let setdate = function (str:any) {
   const caroucel_button = document.getElementsByClassName('js-caroucel-button');
   for(let i = 0; i < caroucel_button.length; i++){
     caroucel_button[i].addEventListener("click",(e) => {
-      console.log(e.target.getAttribute('id'));
       if( e.target.getAttribute('id') === 'background_switch' ) {
           document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
           document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
@@ -216,14 +216,6 @@ let setdate = function (str:any) {
 </script>
 
 <style>
-  #renderCanvasList {
-    position: fixed;
-    width: 100%;
-    height: auto;
-    top: 50%;
-    left: 100%;
-    transform: translate(-100%, -50%);
-  }
   #renderCanvasBanner {
     position: fixed;
     width: 100%;
@@ -250,7 +242,6 @@ let setdate = function (str:any) {
         opacity: 1;
     }
   }
-
   .close_button {
     position: fixed;
     top: 74px;

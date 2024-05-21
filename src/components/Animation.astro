@@ -1,4 +1,4 @@
-<canvas id="renderCanvas"></canvas>
+<canvas id="renderCanvas" class="tw-rendercanvas"></canvas>
 
 <script type="text/javascript">
   function main() {
@@ -15,16 +15,20 @@
 
     // ライトモード・ダークモード切り替えスイッチ
     function light_dark(target) {
-      if( target === 'dark' ) {
-        document.getElementById('light').classList.add('tw-opacity-50');        
-        document.getElementById('light').classList.remove('tw-filter-drow-shadow');
-        document.getElementById('dark').classList.add('tw-filter-drow-shadow');
-        document.getElementById('dark').classList.remove('tw-opacity-50');
-      } else {
-        document.getElementById('light').classList.add('tw-filter-drow-shadow');        
-        document.getElementById('light').classList.remove('tw-opacity-50');
-        document.getElementById('dark').classList.add('tw-opacity-50');
-        document.getElementById('dark').classList.remove('tw-filter-drow-shadow');
+
+      switch(true) {
+        case target === 'dark':
+          document.getElementById('light').classList.add('tw-opacity-50');        
+          document.getElementById('light').classList.remove('tw-filter-drow-shadow');
+          document.getElementById('dark').classList.add('tw-filter-drow-shadow');
+          document.getElementById('dark').classList.remove('tw-opacity-50');
+          break;
+        default:
+          document.getElementById('light').classList.add('tw-filter-drow-shadow');        
+          document.getElementById('light').classList.remove('tw-opacity-50');
+          document.getElementById('dark').classList.add('tw-opacity-50');
+          document.getElementById('dark').classList.remove('tw-filter-drow-shadow');
+          break;          
       }
       
       const canvas = document.getElementById('renderCanvas');
@@ -34,16 +38,20 @@
       const main = document.getElementsByTagName("main");
             main[0].prepend(canvas_element);
       const new_canvas = document.getElementById('renderCanvas');
+            new_canvas.classList.add('tw-rendercanvas');      
       const engine = new BABYLON.Engine(new_canvas);
       renderfunction(target);
     }
 
     // ビジュアルをレンダリング
     function renderfunction(light_dark) {
+
+      // 初期設定
       const loading = document.getElementById("js-loading");
-            loading.classList.remove('tw-hidden');
       const canvas = document.getElementById('renderCanvas');
       const engine = new BABYLON.Engine(canvas);      
+
+      // シーン取得など
       const createScene = function () {
         const scene = new BABYLON.Scene(engine);
         const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, Math.PI / 2.5, new BABYLON.Vector3(0, 0, 0));
@@ -91,7 +99,7 @@
               largeGround.rotation.y = degree(90);
               largeGround.position.y = -0.5;            
 
-        // ティー
+        // ティー作成
         const tea = BABYLON.Mesh.CreateSphere("tea", 10, .3);
               tea.material = new BABYLON.StandardMaterial("teamaterial");
               tea.material.diffuseColor = new BABYLON.Color3(1, 1, 1);  
@@ -324,9 +332,10 @@
 
           return scene;
         };
-
       const scene = createScene();
       
+      loading.classList.remove('tw-hidden');
+
       engine.runRenderLoop(() => {
         scene.render();
       });
@@ -339,28 +348,7 @@
         loading.classList.add('tw-hidden');
       }, 1000);
     }
-
     renderfunction();
-
   }
   window.addEventListener('DOMContentLoaded', main);
 </script>
-
-<style is:global>
-	#renderCanvas {
-		width   : 100%;
-		height  : 100%;
-		touch-action: none;
-		top:0;
-		left: 0;
-	}
-  #js-loading {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: black;
-    width: 100%;
-    height: 100vh;
-    z-index: 1000;
-  }
-</style>
