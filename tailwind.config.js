@@ -27,6 +27,19 @@ module.exports = {
         ".filter-drow-shadow": {
           filter: "drop-shadow(0px 0px 1px #fff) drop-shadow(0px 0px 1px #fff)",
         },
+        ".loading-animation": {
+          animation: "loading-animation .8s linear 0s infinite",
+        },
+        ".rendercanvas": {
+          width: "100%",
+          height: "100vh",
+          top: "0px",
+          left: "0px",
+          TouchEvent: "none"
+        },
+        ".close-btn-line": {
+          filter: "drop-shadow(0px 0px 1px #ffffff) drop-shadow(0px 0px 1px #ffffff)",
+        },
       };
       addUtilities(newUtilities);
     }
