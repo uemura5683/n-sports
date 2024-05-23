@@ -12,10 +12,10 @@ let setdate = function (str:any) {
 ---
 
 <div class="tw-relative">
-  <div class="close_button tw-hidden">
+  <div class="close_button tw-hidden tw-fixed tw-top-[74px] tw-right-[20px] tw-w-[30px] tw-text-[50px] tw-leading-[30px] tw-cursor-pointer tw-z-[10]">
     <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <line y1="-1" x2="35.3553" y2="-1" transform="matrix(0.707108 0.707106 -0.707108 0.707106 2.31006 2.30957)" stroke="black" stroke-width="2"/>
-      <line y1="-1" x2="35.3553" y2="-1" transform="matrix(0.707108 -0.707106 0.707108 0.707106 2.31006 27.3096)" stroke="black" stroke-width="2"/>
+      <line class="tw-close-btn-line" y1="-1" x2="35.3553" y2="-1" transform="matrix(0.707108 0.707106 -0.707108 0.707106 2.31006 2.30957)" stroke="black" stroke-width="2"/>
+      <line class="tw-close-btn-line" y1="-1" x2="35.3553" y2="-1" transform="matrix(0.707108 -0.707106 0.707108 0.707106 2.31006 27.3096)" stroke="black" stroke-width="2"/>
     </svg>
   </div>
   <canvas
@@ -24,7 +24,7 @@ let setdate = function (str:any) {
     data-blog={resnublog.contents.map((content: any) => content.image.url + '|' + content.image.width + '|' + content.image.height  + '|' + content.title)}
   >
   </canvas> 
-  <canvas id="renderCanvasBanner" class="tw-hidden"></canvas>
+  <canvas id="renderCanvasBanner" class="tw-hidden tw-animation-once"></canvas>
 </div>
 
 <script type="text/javascript">
@@ -38,7 +38,9 @@ let setdate = function (str:any) {
           document.getElementById('background_switch').classList.remove('tw-opacity-50')
           document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
           document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
-          document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');
+          document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');          
+          document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
+          document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');          
       } else {
           document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
           document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
@@ -46,6 +48,8 @@ let setdate = function (str:any) {
           document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
           document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
           document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');
+          document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
+          document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');              
       }
     }, false);
   }
@@ -241,20 +245,5 @@ let setdate = function (str:any) {
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
     }
-  }
-  .close_button {
-    position: fixed;
-    top: 74px;
-    right: 20px;
-    width: 30px;
-    font-size: 50px;
-    line-height: 30px;
-    cursor: pointer;
-    z-index: 10;
-  }
-  .close_button line {
-    filter:
-      drop-shadow(0px 0px 1px #ffffff)
-      drop-shadow(0px 0px 1px #ffffff);
   }
 </style>
