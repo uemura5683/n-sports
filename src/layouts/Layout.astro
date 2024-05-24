@@ -1,10 +1,4 @@
 ---
-interface Props {
-	title: string;
-}
-
-const { title } = Astro.props;
-
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 ---
@@ -16,18 +10,18 @@ import Footer from '../components/Footer.astro';
     <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link href="/tailwind.css" rel="stylesheet" >
+    <link href="/tailwind.css" rel="stylesheet" />
     <script is:inline src="https://preview.babylonjs.com/babylon.js"></script>
     <script is:inline src="https://cdn.babylonjs.com/materialsLibrary/babylon.gridMaterial.js"></script>
     <script is:inline src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
     <script is:inline src="https://unpkg.com/earcut@latest/dist/earcut.min.js"></script>
     <script is:inline src="https://cdn.babylonjs.com/materialsLibrary/babylon.waterMaterial.js"></script>
-    <title>{title}</title>
+    <title>N sports</title>
   </head>
   <body>
     <Header />
     <slot />
-    <Footer />		
+    <Footer />
   </body>
 </html>
 <style is:global>
@@ -49,5 +43,15 @@ import Footer from '../components/Footer.astro';
     font-family: system-ui, sans-serif;
     background: #13151a;
     background-size: 224px;
+  }
+  @keyframes loading-animation {
+    0% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0)
+    }
+    to {
+      -webkit-transform: rotate(359deg);
+      transform: rotate(359deg)
+    }
   }
 </style>
