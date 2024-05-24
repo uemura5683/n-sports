@@ -6,7 +6,7 @@ interface Props {
 const { name } = Astro.props;
 ---
 
-<!-- カルーセル -->
+{/* カルーセル */}
 {
   name === 'caroucel' && 
     <svg width="47" height="46" viewBox="0 0 47 46" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
@@ -18,7 +18,7 @@ const { name } = Astro.props;
     </svg>
 }
 
-<!-- pc -->
+{/* 背景 */}
 {
   name === 'pc' && 
     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
@@ -30,7 +30,7 @@ const { name } = Astro.props;
     </svg>
 }
 
-<!-- ライトモード -->
+{/* ライトモード */}
 {
   name === 'light' && 
     <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
@@ -42,7 +42,7 @@ const { name } = Astro.props;
     </svg>
 }
 
-<!-- ダーク -->
+{/* ダークモード */}
 {
   name === 'dark' && 
     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
