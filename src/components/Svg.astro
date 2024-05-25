@@ -54,3 +54,12 @@ const { name } = Astro.props;
       <path d="M31 3.23607L33.1921 9.98278L33.4167 10.6738H34.1432H41.2371L35.498 14.8435L34.9102 15.2705L35.1347 15.9615L37.3269 22.7082L31.5878 18.5385L31 18.1115L30.4122 18.5385L24.6731 22.7082L26.8653 15.9615L27.0898 15.2705L26.502 14.8435L20.7629 10.6738H27.8568H28.5833L28.8079 9.98278L31 3.23607Z" fill="#666666" stroke="#666666" stroke-width="2"/>
     </svg>
 }
+
+{/* クローズ */}
+{
+  name === 'close' && 
+    <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line class="tw-close-btn-line" y1="-1" x2="35.3553" y2="-1" transform="matrix(0.707108 0.707106 -0.707108 0.707106 2.31006 2.30957)" stroke="black" stroke-width="2"/>
+      <line class="tw-close-btn-line" y1="-1" x2="35.3553" y2="-1" transform="matrix(0.707108 -0.707106 0.707108 0.707106 2.31006 27.3096)" stroke="black" stroke-width="2"/>
+    </svg>
+}
