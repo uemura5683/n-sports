@@ -2,7 +2,6 @@
 
 <script type="text/javascript">
 
-  /*
   class LightDarkmode {
     constructor() {
       this.degree();
@@ -55,359 +54,6 @@
       this.renderfunction(target);
     }
     renderfunction(light_dark) {
-      // 初期設定
-      const loading = document.getElementById("js-loading");
-      const canvas = document.getElementById('renderCanvas');
-      const engine = new BABYLON.Engine(canvas);      
-
-      // シーン取得など
-      const createScene = function () {
-        const scene = new BABYLON.Scene(engine);
-        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, Math.PI / 2.5, new BABYLON.Vector3(0, 0, 0));
-        camera.position = new BABYLON.Vector3(30, 30, 30);
-        camera.attachControl(canvas, true);
-
-        // 光源設定
-        switch( true ) {
-          case light_dark == 'dark':
-            const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
-                  spot.diffuse = new BABYLON.Color3(.7, .7, .7);
-                  spot.specular = new BABYLON.Color3(0, 0, 0);
-                  spot.position.y = 20;
-                  spot.position.x = 45;
-            const moon = BABYLON.Mesh.CreateSphere("moon", 10, 4);
-                  moon.material = new BABYLON.StandardMaterial("moon");
-                  moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
-                  moon.position.y = 20;
-                  moon.position.x = 45;
-            break;
-          default:
-            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-                  light.intensity = .6;
-            break;
-        }
-
-        // 空
-        const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
-        const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-              skyboxMaterial.backFaceCulling = false;
-        const skyboxTexture = light_dark == 'dark'
-                            ? "textures/sky_dark/skybox"
-                            : "textures/sky/skybox";
-              skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(skyboxTexture, scene);
-              skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-              skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-              skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-              skybox.material = skyboxMaterial;
-
-        // グランドを作成
-        const largeGroundMat = new BABYLON.StandardMaterial("largeGroundMat");
-              largeGroundMat.diffuseTexture = new BABYLON.Texture("textures/ground/valleygrass.png");
-        const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "textures/ground/villageheightmap.png", {width:72, height:72, subdivisions: 200, minHeight:0, maxHeight: 8.5});  
-              largeGround.material = largeGroundMat;
-              largeGround.rotation.y = this.degree(90);
-              largeGround.position.y = -0.5;            
-
-        // ティー作成
-        const tea = BABYLON.Mesh.CreateSphere("tea", 10, .3);
-              tea.material = new BABYLON.StandardMaterial("teamaterial");
-              tea.material.diffuseColor = new BABYLON.Color3(1, 1, 1);  
-              tea.position.y = 8.3;
-              tea.position.x = -27.5;
-              tea.position.z = 24;
-        const tea1 = tea.clone();
-              tea1.position.y = 8.3;
-              tea1.position.x = -23.5;
-              tea1.position.z = 28.5;
-
-        const tea_under = BABYLON.MeshBuilder.CreateCylinder("tea_under", {height:.5, diameter: .1});
-        const tea_under_material = new BABYLON.StandardMaterial("tea_under_material", scene);
-              tea_under_material.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0.8);
-              tea_under_material.alpha = .9;
-              tea_under.material = tea_under_material;
-              tea_under.position.y = 8;
-              tea_under.position.x = -27.5;
-              tea_under.position.z = 24;
-        const tea_under1 = tea_under.clone();
-              tea_under1.position.x = -23.5;
-              tea_under1.position.z = 28.5;      
-
-        // カップを作成
-        const golfcup = BABYLON.MeshBuilder.CreateCylinder("golfcup", {height:1, depth:0.1});
-        const golfcupMaterial = new BABYLON.StandardMaterial("golfcupmaterial", scene);
-              golfcupMaterial.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0.8);
-              golfcupMaterial.alpha = .9;
-              golfcup.material = golfcupMaterial;
-              golfcup.position.x = 32;
-              golfcup.position.y = 2.12;
-              golfcup.position.z = -10.8;
-              golfcup.rotation.z = this.degree(2);
-              golfcup.rotation.x = this.degree(-3);
-
-        // 水を作成
-        const waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 20, 37, 10, scene, false);
-        const water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
-              water.backFaceCulling = true;
-              water.bumpTexture = new BABYLON.Texture("textures/water/waterbump.png", scene);
-              water.windForce = -2;
-              water.waveHeight = 0.1;
-              water.bumpHeight = 0.1;
-              water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.2);
-              water.colorBlendFactor = 0.5;
-              water.addToRenderList(skybox);
-              water.addToRenderList(largeGround);
-              waterMesh.material = water;
-              waterMesh.position.x = 2.9;      
-              waterMesh.position.y = 1.8;
-              waterMesh.position.z = 16.5;   
-
-        // 木を作成
-        const elementree = light_dark == 'dark' ? "textures/wood/wood_dark.png" : "textures/wood/wood.png";
-        const spritetree = new BABYLON.SpriteManager("treesManager", elementree, 135, {width: 538, height: 680}, scene);
-      
-        for (let i = 0; i < 135; i++) {
-          switch(true) {
-            // right side
-            case i > 0 && i < 3:
-              const treer_1 = new BABYLON.Sprite("tree", spritetree);
-              treer_1.width = 4;
-              treer_1.height = 6;              
-              treer_1.position.x = Math.random() * (1) - (30 + ((3 * 2 - i * 2 ) * 1.1 ));
-              treer_1.position.z = Math.random() * -2  - (6 - ((3 * 2 - i * 2) * 1.3 ));
-              treer_1.position.y = 5;
-              break;    
-            case i > 3 && i < 8:
-              const treer_2 = new BABYLON.Sprite("tree", spritetree);
-              treer_2.width = 4;
-              treer_2.height = 6;              
-              treer_2.position.x = Math.random() * (1) - (20 + ((8 * 2 - i * 2) * 1.3 ));
-              treer_2.position.z = Math.random() * -1  - (11- ((8 * 2 - i * 2) * .7 ));
-              treer_2.position.y = 5;
-              break;   
-            case i > 8 && i < 13:
-              const treer_3 = new BABYLON.Sprite("tree", spritetree);
-              treer_3.width = 4;
-              treer_3.height = 6;              
-              treer_3.position.x = Math.random() * (1) - (10 + ((13 * 2 - i * 2) * 1.3 ));
-              treer_3.position.z = Math.random() * -1  - (14 - ((13 * 2 - i * 2) * .4 ));
-              treer_3.position.y = 5;
-              break;
-            case i > 13 && i < 23:
-              const treer_4 = new BABYLON.Sprite("tree", spritetree);
-              treer_4.width = 4;
-              treer_4.height = 6;              
-              treer_4.position.x = Math.random() * (1) - (0 + ((23 * 2 - i * 2) * 1.3 ));
-              treer_4.position.z = Math.random() * -1  - (17 - ((23 * 2 - i * 2) * .4 ));
-              treer_4.position.y = 5;
-              break;
-            case i > 23 && i < 28:
-              const treer_5 = new BABYLON.Sprite("tree", spritetree);
-              treer_5.width = 4;
-              treer_5.height = 6;              
-              treer_5.position.x = Math.random() * (1) + (11 - ((28 * 2 - i * 2) * 1.3 ));
-              treer_5.position.z = Math.random() * -1  - (19.5 - ((28 * 2 - i * 2) * .4 ));
-              treer_5.position.y = 5;
-              break;
-            case i > 28 && i < 38:
-              const treer_6 = new BABYLON.Sprite("tree", spritetree);
-              treer_6.width = 4;
-              treer_6.height = 6;              
-              treer_6.position.x = Math.random() * 1 + (35 - ((38 * 2 - i * 2) * 1.3 ));
-              treer_6.position.z = Math.random() * -1  - (30.5 - ((38 * 2 - i * 2) * .6));
-              treer_6.position.y = 5;
-              break;
-            // front area
-            case i > 38 && i < 80:
-              const treef_1 = new BABYLON.Sprite("tree", spritetree);
-              treef_1.width = 4;
-              treef_1.height = 6;              
-              treef_1.position.x = Math.random() * (15) - 23;
-              treef_1.position.z = Math.random() * 15  - 4;
-              treef_1.position.y = 5;
-              break;
-            case i > 80 && i < 95:
-              const treef_2 = new BABYLON.Sprite("tree", spritetree);
-              treef_2.width = 4;
-              treef_2.height = 6;              
-              treef_2.position.x = Math.random() * (6) - 18;
-              treef_2.position.z = Math.random() * 10  + 6;
-              treef_2.position.y = 5;
-              break;
-            case i > 95 && i < 105:
-              const treef_3 = new BABYLON.Sprite("tree", spritetree);
-              treef_3.width = 4;
-              treef_3.height = 6;              
-              treef_3.position.x = Math.random() * (6) - 13;
-              treef_3.position.z = Math.random() * 6  + 14;
-              treef_3.position.y = 5;
-              break;
-            case i > 105 && i < 112:
-              const treef_4 = new BABYLON.Sprite("tree", spritetree);
-              treef_4.width = 4;
-              treef_4.height = 6;              
-              treef_4.position.x = Math.random() * (6) - 10;
-              treef_4.position.z = Math.random() * 6  + 20;
-              treef_4.position.y = 5;
-              break;
-            case i > 112 && i < 127:
-              const treef_5 = new BABYLON.Sprite("tree", spritetree);
-              treef_5.width = 4;
-              treef_5.height = 6;              
-              treef_5.position.x = Math.random() * (6) - 8;
-              treef_5.position.z = Math.random() * 8  + 27;
-              treef_5.position.y = 5;
-              break;
-            default:
-              const tree = new BABYLON.Sprite("tree", spritetree);
-              tree.width = 4;
-              tree.height = 6;                 
-              tree.position.x = Math.random() * (-5) + 19;
-              tree.position.z = Math.random() * 8 + 27;
-              tree.position.y = 5;
-              break;
-          }
-        }
-            
-        // ランプを作成
-        BABYLON.SceneLoader.ImportMeshAsync("", "", "lamp.babylon").then(() =>{
-          const lignts =  light_dark == 'dark' ? 0.63 : 0;
-          const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0.25, -1, 0), lignts * Math.PI, 0.01, scene);
-
-                lampLight.diffuse = BABYLON.Color3.White();
-                lampLight.parent = scene.getMeshByName("bulb");
-
-          const lamp = scene.getMeshByName("lamp");
-                lamp.position = new BABYLON.Vector3(2, 2, 2); 
-                lamp.rotation = BABYLON.Vector3.Zero();
-                lamp.rotation.y = -Math.PI / 2;
-                lamp.position.x = 23;
-                lamp.position.z = -27;
-
-          lamp1 = lamp.clone("lamp1");
-          lamp1.position.z = -20;
-          lamp1.position.x = 0;
-
-          lamp2 = lamp.clone("lamp2");
-          lamp2.position.z = -12;
-          lamp2.position.x = -23;
-        });
-
-        // 噴水を作成
-        BABYLON.SceneLoader.ImportMeshAsync("", "", "fountain.babylon").then(() =>  {
-
-          const fountain = scene.getMeshByName("fountain");
-          fountain.position.x = -27.7;
-          fountain.position.y = 2.3;
-          fountain.position.z = 6.8;
-
-          let particleSystem = new BABYLON.ParticleSystem("particles", 5000, scene);
-
-          particleSystem.particleTexture = new BABYLON.Texture("textures/flare/flare.png", scene);
-
-          particleSystem.emitter = new BABYLON.Vector3(-27.7, 6.3, 6.8);
-          particleSystem.minEmitBox = new BABYLON.Vector3(0, 0, 0);
-          particleSystem.maxEmitBox = new BABYLON.Vector3(0, 0, 0);
-
-          particleSystem.color1 = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
-          particleSystem.color2 = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
-          particleSystem.colorDead = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
-
-          // パーティクルのサイズ
-          particleSystem.minSize = 0.1 / 2;
-          particleSystem.maxSize = 0.8 / 2;
-
-          particleSystem.minLifeTime = 1;
-          particleSystem.maxLifeTime = 2.5;
-
-          particleSystem.emitRate = 1500;
-
-          particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-
-          particleSystem.gravity = new BABYLON.Vector3(0, -3.81, 0);
-
-          // 噴水のばら撒く距離
-          particleSystem.direction1 = new BABYLON.Vector3(-.2, 1, .2);
-          particleSystem.direction2 = new BABYLON.Vector3(.2, 1, -.2);
-
-          particleSystem.minAngularSpeed = 0;
-          particleSystem.maxAngularSpeed = Math.PI;
-
-          particleSystem.minEmitPower = 2;
-          particleSystem.maxEmitPower = 3;
-          particleSystem.updateSpeed = 0.025;
-
-          particleSystem.start();
-        });
-
-        return scene;
-      };
-      const scene = createScene();
-      
-      // ローディングを解除する
-      loading.classList.remove('tw-hidden');
-
-      engine.runRenderLoop(() => {
-        scene.render();
-      });
-      
-      window.addEventListener('resize', () => {
-        engine.resize();
-      });
-
-      setTimeout(() => {
-        loading.classList.add('tw-hidden');
-      }, 1000);
-    }
-  }
-  new LightDarkmode();
-  */
-
-  function main() {
-    function degree(degrees) {
-      return degrees * (Math.PI / 180);
-    }
-    
-    const mode_switch = document.getElementsByClassName('js-mode-button');
-    for(let i = 0; i < mode_switch.length; i++){
-      mode_switch[i].addEventListener("click",(e) => {
-        light_dark(e.target.getAttribute('id'));
-      }, false);
-    }
-
-    // ライトモード・ダークモード切り替えスイッチ
-    function light_dark(target) {
-
-      switch(true) {
-        case target === 'dark':
-          document.getElementById('light').classList.add('tw-opacity-50');        
-          document.getElementById('light').classList.remove('tw-filter-drow-shadow');
-          document.getElementById('dark').classList.add('tw-filter-drow-shadow');
-          document.getElementById('dark').classList.remove('tw-opacity-50');
-          break;
-        default:
-          document.getElementById('light').classList.add('tw-filter-drow-shadow');        
-          document.getElementById('light').classList.remove('tw-opacity-50');
-          document.getElementById('dark').classList.add('tw-opacity-50');
-          document.getElementById('dark').classList.remove('tw-filter-drow-shadow');
-          break;          
-      }
-      
-      const canvas = document.getElementById('renderCanvas');
-            canvas.remove();
-      const canvas_element = document.createElement('canvas');
-            canvas_element.setAttribute("id",'renderCanvas');
-      const main = document.getElementsByTagName("main");
-            main[0].prepend(canvas_element);
-      const new_canvas = document.getElementById('renderCanvas');
-            new_canvas.classList.add('tw-rendercanvas');      
-      const engine = new BABYLON.Engine(new_canvas);
-
-      // ビジュアルをレンダリングする
-      renderfunction(target);
-    }
-
-    // ビジュアルをレンダリング
-    function renderfunction(light_dark) {
 
       // 初期設定
       const loading = document.getElementById("js-loading");
@@ -415,7 +61,8 @@
       const engine = new BABYLON.Engine(canvas);      
 
       // シーン取得など
-      const createScene = function () {
+      const createScene = function (degree, light_dark) {
+        
         const scene = new BABYLON.Scene(engine);
         const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, Math.PI / 2.5, new BABYLON.Vector3(0, 0, 0));
         camera.position = new BABYLON.Vector3(30, 30, 30);
@@ -634,16 +281,8 @@
                 lamp.position = new BABYLON.Vector3(2, 2, 2); 
                 lamp.rotation = BABYLON.Vector3.Zero();
                 lamp.rotation.y = -Math.PI / 2;
-                lamp.position.x = 23;
-                lamp.position.z = -27;
-
-          lamp1 = lamp.clone("lamp1");
-          lamp1.position.z = -20;
-          lamp1.position.x = 0;
-
-          lamp2 = lamp.clone("lamp2");
-          lamp2.position.z = -12;
-          lamp2.position.x = -23;
+                lamp.position.x = 0;
+                lamp.position.z = -20;
         });
 
         // 噴水を作成
@@ -695,7 +334,7 @@
 
         return scene;
       };
-      const scene = createScene();
+      const scene = createScene( this.degree, light_dark );
       
       // ローディングを解除する
       loading.classList.remove('tw-hidden');
@@ -712,8 +351,7 @@
         loading.classList.add('tw-hidden');
       }, 1000);
     }
-    renderfunction();
   }
-  window.addEventListener('DOMContentLoaded', main);
+  new LightDarkmode();
 
 </script>

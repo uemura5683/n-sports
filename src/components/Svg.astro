@@ -2,13 +2,12 @@
 interface Props {
 	name: string;
 }
-
 const { name } = Astro.props;
 ---
 
 {/* カルーセル */}
 {
-  name === 'caroucel' && 
+  name === 'js-caroucelmove' && 
     <svg width="47" height="46" viewBox="0 0 47 46" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
       <rect x="5.81128" y="1" width="33.6604" height="25.0949" fill="#666666" stroke="#666666" stroke-width="2"/>
       <line x1="46" y1="6.09321e-08" x2="46" y2="27.0949" stroke="#666666" stroke-width="2"/>
@@ -20,7 +19,7 @@ const { name } = Astro.props;
 
 {/* 背景 */}
 {
-  name === 'pc' && 
+  name === 'js-pcmove' && 
     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
       <rect x="11" y="9" width="19" height="28" fill="#666666" stroke="#666666" stroke-width="2"/>
       <rect x="1" y="1" width="43" height="28" fill="#666666" stroke="#666666" stroke-width="2"/>
@@ -32,7 +31,7 @@ const { name } = Astro.props;
 
 {/* ライトモード */}
 {
-  name === 'light' && 
+  name === 'js-lightmode' && 
     <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
       <circle cx="24.5" cy="23" r="13" fill="#666666" stroke="#666666" stroke-width="2"/>
       <line x1="24" y1="4.37114e-08" x2="24" y2="47" stroke="#666666" stroke-width="2"/>
@@ -44,7 +43,7 @@ const { name } = Astro.props;
 
 {/* ダークモード */}
 {
-  name === 'dark' && 
+  name === 'js-darkmode' && 
     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" class="tw-w-[25px] tw-h-[25px] tw-pointer-events-none">
       <mask id="path-1-inside-1_1215_27" fill="white">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M41.901 33.903C38.5576 35.872 34.6606 37.0014 30.4998 37.0014C18.0733 37.0014 7.99976 26.9278 7.99976 14.5014C7.99976 10.3399 9.1295 6.44237 11.099 3.09863C4.45724 7.01005 0.000244141 14.2347 0.000244141 22.5003C0.000244141 34.9267 10.0738 45.0003 22.5002 45.0003C30.7652 45.0003 37.9893 40.544 41.901 33.903Z"/>

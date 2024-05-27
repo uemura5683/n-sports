@@ -1,9 +1,7 @@
 ---
 import { getNsports } from "../../library/microcms";
 import Svg from '../components/Svg.astro';
-
 const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] } );
-
 ---
 
 <div class="tw-relative">
@@ -16,7 +14,10 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
     data-blog={resnublog.contents.map((content: any) => content.image.url + '|' + content.image.width + '|' + content.image.height  + '|' + content.title)}
   >
   </canvas> 
-  <canvas id="renderCanvasBanner" class="tw-hidden tw-animation-once"></canvas>
+  <canvas
+    id="renderCanvasBanner"
+    class="tw-animate-card-fadein tw-animate-card-fadein-adjustment tw-hidden tw-fixed tw-w-[100%] tw-h-[100vh] tw-top-[0] tw-left-[0] tw-opacity-0">
+  </canvas>
 </div>
 
 <script type="text/javascript">
@@ -209,32 +210,3 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
     bnrrenderfunction();
   }
 </script>
-
-<style>
-  #renderCanvasBanner {
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: fadein 0.5s ease-in-out 0s infinite;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    opacity: 0;
-  }
-  @keyframes fadein {
-    0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 0;
-    }
-    80% {
-        transform: translate(-50%, -50%) scale(1.1);
-        opacity: 0.8;
-    }    
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
-  }
-</style>
