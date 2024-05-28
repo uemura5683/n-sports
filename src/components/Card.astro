@@ -21,6 +21,35 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
 </div>
 
 <script type="text/javascript">
+  /*
+  class RenderCarousel {
+    constructor() {
+      this.switch();
+    }
+    switch(isdata) {
+      if( isdata.target.getAttribute('id') === 'background_switch' ) {
+        document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
+        document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
+        document.getElementById('background_switch').classList.remove('tw-opacity-50')
+        document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
+        document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
+        document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');          
+        document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
+        document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');          
+      } else {
+        document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
+        document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
+        document.getElementById('background_switch').classList.add('tw-opacity-50')
+        document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
+        document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
+        document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
+        document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');        
+        document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');              
+      }      
+    }
+  }
+  const rendercarousel = new RenderCarousel();
+  */
 
   const caroucel_button = document.getElementsByClassName('js-caroucel-button');
   for(let i = 0; i < caroucel_button.length; i++){
@@ -40,12 +69,15 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
         document.getElementById('background_switch').classList.add('tw-opacity-50')
         document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
         document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
-        document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');
         document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
+        document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');        
         document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');              
-      }
+      }   
     }, false);
   }
+
+
+
 
   const button_targets = document.querySelectorAll('.cart-wrap-inner');
   for(let i = 0; i < button_targets.length; i++){
@@ -120,9 +152,7 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
         box.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnDoublePickTrigger, function () {
           const target = canvaslistsplit[index];
           target_split = target.split('|');
-
           document.getElementById('renderCanvasList').classList.add('tw-hidden');
-
           document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
           document.querySelector('.close_button').classList.remove('tw-hidden');
           mainbanner(target_split[0], target_split[1], target_split[2]);
