@@ -21,62 +21,42 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
 </div>
 
 <script type="text/javascript">
-  /*
-  class RenderCarousel {
+  
+  class MoveSwitch {
     constructor() {
+      this.js_button = document.getElementsByClassName('js-caroucel-button');
       this.switch();
     }
     switch(isdata) {
-      if( isdata.target.getAttribute('id') === 'background_switch' ) {
-        document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
-        document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
-        document.getElementById('background_switch').classList.remove('tw-opacity-50')
-        document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
-        document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
-        document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');          
-        document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
-        document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');          
-      } else {
-        document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
-        document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
-        document.getElementById('background_switch').classList.add('tw-opacity-50')
-        document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
-        document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
-        document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
-        document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');        
-        document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');              
-      }      
+      if( isdata != undefined ) {
+        if( isdata.target.getAttribute('id') === 'background_switch' ) {
+          document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
+          document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
+          document.getElementById('background_switch').classList.remove('tw-opacity-50')
+          document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
+          document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
+          document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');          
+          document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
+          document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');          
+        } else {
+          document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
+          document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
+          document.getElementById('background_switch').classList.add('tw-opacity-50')
+          document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
+          document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
+          document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
+          document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');        
+          document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');              
+        }  
+      }    
     }
   }
-  const rendercarousel = new RenderCarousel();
-  */
-
-  const caroucel_button = document.getElementsByClassName('js-caroucel-button');
-  for(let i = 0; i < caroucel_button.length; i++){
-    caroucel_button[i].addEventListener("click",(e) => {
-      if( e.target.getAttribute('id') === 'background_switch' ) {
-        document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
-        document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
-        document.getElementById('background_switch').classList.remove('tw-opacity-50')
-        document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
-        document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
-        document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');          
-        document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
-        document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');          
-      } else {
-        document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
-        document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
-        document.getElementById('background_switch').classList.add('tw-opacity-50')
-        document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
-        document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
-        document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
-        document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');        
-        document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');              
-      }   
-    }, false);
+  const moveswitch = new MoveSwitch();
+  for(let i = 0; i < moveswitch.js_button.length; i++){
+    moveswitch.js_button[i].addEventListener("click",(e) => {
+      moveswitch.switch(e);
+    });
   }
-
-
 
 
   const button_targets = document.querySelectorAll('.cart-wrap-inner');
