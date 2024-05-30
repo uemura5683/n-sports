@@ -59,30 +59,30 @@
       this.renderfunction(target);
     }
     renderfunction(light_dark) {
+        // 初期設定
+        const loading = document.getElementById("js-loading");
+        const canvas = document.getElementById('renderCanvas');
+        const engine = new BABYLON.Engine(canvas);      
+        const scene = this.createScene( this.degree, light_dark, engine, canvas );
+        
+        // ローディングを解除する
+        loading.classList.remove('tw-hidden');
 
-      // 初期設定
-      const loading = document.getElementById("js-loading");
-      const canvas = document.getElementById('renderCanvas');
-      const engine = new BABYLON.Engine(canvas);      
-      const scene = this.createScene( this.degree, light_dark, engine, canvas );
-      
-      // ローディングを解除する
-      loading.classList.remove('tw-hidden');
+        engine.runRenderLoop(() => {
+          scene.render();
+        });
+        
+        window.addEventListener('resize', () => {
+          engine.resize();
+        });
 
-      engine.runRenderLoop(() => {
-        scene.render();
-      });
-      
-      window.addEventListener('resize', () => {
-        engine.resize();
-      });
+        setTimeout(() => {
+          loading.classList.add('tw-hidden');
+        }, 1000);
 
-      setTimeout(() => {
-        loading.classList.add('tw-hidden');
-      }, 1000);
     }
     sky_ground_water_setting(light_dark, degree, scene) {
-      if(degree != undefined) {
+      if( !( light_dark == undefined && degree == undefined && scene == undefined ) ) {
         // 空        
         const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
         const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
@@ -127,6 +127,7 @@
       }
     }
     tea_setting(scene) {
+      if( scene != undefined) {      
         const tea = BABYLON.Mesh.CreateSphere("tea", 10, .3);
               tea.material = new BABYLON.StandardMaterial("teamaterial");
               tea.material.diffuseColor = new BABYLON.Color3(1, 1, 1);  
@@ -149,9 +150,10 @@
         const tea_under1 = tea_under.clone();
               tea_under1.position.x = -23.5;
               tea_under1.position.z = 28.5;
+      }
     }
     cup_setting(degree, scene) {
-      if(degree != undefined) {      
+      if( !( degree == undefined && scene == undefined ) ) {
         const golfcup = BABYLON.MeshBuilder.CreateCylinder("golfcup", {height:1, depth:0.1});
         const golfcupMaterial = new BABYLON.StandardMaterial("golfcupmaterial", scene);
               golfcupMaterial.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0.8);
@@ -165,6 +167,7 @@
       }
     }
     tree_setting(light_dark, scene) {
+      if( !( light_dark == undefined && scene == undefined ) ) {
         const elementree = light_dark == 'dark' ? "textures/wood/wood_dark.png" : "textures/wood/wood.png";
         const spritetree = new BABYLON.SpriteManager("treesManager", elementree, 135, {width: 538, height: 680}, scene);
       
@@ -270,6 +273,7 @@
               break;
           }
         }
+      }
     }
     lump_setting(light_dark, scene, x, y, z) {
       if( !( light_dark == undefined && scene == undefined ) ) {
@@ -340,7 +344,7 @@
     }
     createScene(degree, light_dark, engine, canvas) {
 
-      if(degree != undefined) {
+      if( !( degree == undefined && light_dark == undefined ) ) {
 
         const scene = new BABYLON.Scene(engine);
         const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, Math.PI / 2.5, new BABYLON.Vector3(0, 0, 0));
