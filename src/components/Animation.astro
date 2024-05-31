@@ -9,6 +9,7 @@
       this.light_dark();
       this.renderfunction();
       this.createScene();
+      this.pointerLight();
       this.sky_ground_water_setting();
       this.tea_setting();
       this.cup_setting();
@@ -79,7 +80,28 @@
         setTimeout(() => {
           loading.classList.add('tw-hidden');
         }, 1000);
-
+    }
+    pointerLight(light_dark, scene) {
+      if( !( light_dark == undefined && scene == undefined ) ) {
+        switch( true ) {
+          case light_dark == 'dark':
+            const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
+                  spot.diffuse = new BABYLON.Color3(.7, .7, .7);
+                  spot.specular = new BABYLON.Color3(0, 0, 0);
+                  spot.position.y = 20;
+                  spot.position.x = 45;
+            const moon = BABYLON.Mesh.CreateSphere("moon", 10, 4);
+                  moon.material = new BABYLON.StandardMaterial("moon");
+                  moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
+                  moon.position.y = 20;
+                  moon.position.x = 45;
+            break;
+          default:
+            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+                  light.intensity = .6;
+            break;
+        }
+      }
     }
     sky_ground_water_setting(light_dark, degree, scene) {
       if( !( light_dark == undefined && degree == undefined && scene == undefined ) ) {
@@ -343,7 +365,6 @@
       }    
     }
     createScene(degree, light_dark, engine, canvas) {
-
       if( !( degree == undefined && light_dark == undefined ) ) {
 
         const scene = new BABYLON.Scene(engine);
@@ -352,24 +373,7 @@
         camera.attachControl(canvas, true);
 
         // 光源設定
-        switch( true ) {
-          case light_dark == 'dark':
-            const spot = new BABYLON.PointLight("spot", new BABYLON.Vector3(5, 5, 5));
-                  spot.diffuse = new BABYLON.Color3(.7, .7, .7);
-                  spot.specular = new BABYLON.Color3(0, 0, 0);
-                  spot.position.y = 20;
-                  spot.position.x = 45;
-            const moon = BABYLON.Mesh.CreateSphere("moon", 10, 4);
-                  moon.material = new BABYLON.StandardMaterial("moon");
-                  moon.material.emissiveColor = new BABYLON.Color3(1, 1, 0);  
-                  moon.position.y = 20;
-                  moon.position.x = 45;
-            break;
-          default:
-            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-                  light.intensity = .6;
-            break;
-        }
+        this.pointerLight(light_dark, scene);
 
         // 空・グランド・水を作成
         this.sky_ground_water_setting(light_dark, this.degree, scene);

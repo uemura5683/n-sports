@@ -58,26 +58,17 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
     });
   }
 
-  /*
+  
   class Carousel {
+    constructor() {
+      this.clickevent();
+    }
+    clickevent(isdata) {
+    }
   }
   const carousel = new Carousel();
-  */
 
-  const button_targets = document.querySelectorAll('.cart-wrap-inner');
-  for(let i = 0; i < button_targets.length; i++){
-    button_targets[i].addEventListener("click",(e) => {
-      if (e.target.tagName === 'IMG') {
-        const src = e.target.getAttribute('src');
-        const width = e.target.getAttribute('data-width-x');
-        const height = e.target.getAttribute('data-width-y');
-        document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
-        document.querySelector('.close_button').classList.remove('tw-hidden');
-        mainbanner(src, width, height);
-      }
-    }, false);
-  }
-
+  
   document.querySelector('.close_button').addEventListener("click",(e) => { 
     document.getElementById('renderCanvasBanner').classList.add('tw-hidden');
     document.getElementById('renderCanvasList').classList.remove('tw-hidden');
