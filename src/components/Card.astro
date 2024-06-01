@@ -28,27 +28,34 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
       this.switch();
     }
     switch(isdata) {
-      if( isdata != undefined ) {
-        if( isdata.target.getAttribute('id') === 'background_switch' ) {
-          document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
-          document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
-          document.getElementById('background_switch').classList.remove('tw-opacity-50')
-          document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
-          document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
-          document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');          
-          document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
-          document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');          
-        } else {
-          document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
-          document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
-          document.getElementById('background_switch').classList.add('tw-opacity-50')
-          document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
-          document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
-          document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
-          document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');        
-          document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');              
-        }  
-      }    
+      switch(true) {
+        case isdata != undefined:
+          switch(true) {
+            case isdata.target.getAttribute('id') === 'background_switch':
+              document.getElementById('caoucel_switch').classList.add('tw-opacity-50')
+              document.getElementById('caoucel_switch').classList.remove('tw-filter-drow-shadow');
+              document.getElementById('background_switch').classList.remove('tw-opacity-50')
+              document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
+              document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
+              document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');
+              document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
+              document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');
+              break;
+            default:
+              document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
+              document.getElementById('caoucel_switch').classList.add('tw-filter-drow-shadow');
+              document.getElementById('background_switch').classList.add('tw-opacity-50')
+              document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
+              document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
+              document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
+              document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');
+              document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');
+              break;
+          }      
+          break;
+        default:
+          break;
+      }
     }
   }
   const moveswitch = new MoveSwitch();
@@ -58,17 +65,32 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
     });
   }
 
-  
+  /*
   class Carousel {
     constructor() {
+      this.degree();
       this.clickevent();
+      this.bannerlist();
+    }
+    degree(degrees) {
+      // 度数を取得
+      switch(true) {
+        case degrees !== undefined:
+          return degrees * (Math.PI / 180);
+          break;
+        default:
+          return null;
+          break;
+      }
     }
     clickevent(isdata) {
     }
+    bannerlist() {
+    }
   }
   const carousel = new Carousel();
+  */
 
-  
   document.querySelector('.close_button').addEventListener("click",(e) => { 
     document.getElementById('renderCanvasBanner').classList.add('tw-hidden');
     document.getElementById('renderCanvasList').classList.remove('tw-hidden');
@@ -78,7 +100,6 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
   function degree(degrees) {
     return degrees * (Math.PI / 180);
   }
-
   function bannerlist() {
     const canvasblog = document.getElementById('renderCanvasList');
     const engine = new BABYLON.Engine(canvasblog);  
@@ -144,6 +165,8 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
       engine.resize();
     });
   }
+
+
   window.addEventListener('DOMContentLoaded', bannerlist());
 
   function mainbanner(src, width, height) {
