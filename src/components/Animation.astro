@@ -62,18 +62,15 @@
             new_canvas.classList.add('tw-rendercanvas');      
       const engine = new BABYLON.Engine(new_canvas);
 
-      // ビジュアルをレンダリングする
       this.renderfunction(target);
     }
     renderfunction(light_dark) {
         // ビジュアルをレンダリングする
-        // 初期設定
         const loading = document.getElementById("js-loading");
         const canvas = document.getElementById('renderCanvas');
         const engine = new BABYLON.Engine(canvas);      
         const scene = this.createScene( this.degree, light_dark, engine, canvas );
         
-        // ローディングを解除する
         loading.classList.remove('tw-hidden');
 
         engine.runRenderLoop(() => {
@@ -219,12 +216,14 @@
     tree_setting(light_dark, scene) {
       // 木を作成する
       switch(true) {
-        case !( light_dark == undefined && scene == undefined ):         
-          const elementree = light_dark == 'dark' ? "textures/wood/wood_dark.png" : "textures/wood/wood.png";
+        case !( light_dark == undefined && scene == undefined ):
+          const elementree = light_dark == 'dark'
+                           ? "textures/wood/wood_dark.png"
+                           : "textures/wood/wood.png";
           const spritetree = new BABYLON.SpriteManager("treesManager", elementree, 135, {width: 538, height: 680}, scene); 
+
           for (let i = 0; i < 135; i++) {
             switch(true) {
-              // right side
               case i > 0 && i < 3:
                 const treer_1 = new BABYLON.Sprite("tree", spritetree);
                 treer_1.width = 4;
@@ -273,7 +272,6 @@
                 treer_6.position.z = Math.random() * -1  - (30.5 - ((38 * 2 - i * 2) * .6));
                 treer_6.position.y = 5;
                 break;
-              // front area
               case i > 38 && i < 80:
                 const treef_1 = new BABYLON.Sprite("tree", spritetree);
                 treef_1.width = 4;
@@ -334,10 +332,8 @@
       switch(true) {
         case !( light_dark == undefined && scene == undefined ):       
           BABYLON.SceneLoader.ImportMeshAsync("", "", "lamp.babylon").then(() =>{
-
-            const lignts =  light_dark == 'dark' ? 0.63 : 0;
+            const lignts = light_dark == 'dark' ? 0.63 : 0;
             const lampLight = new BABYLON.SpotLight("lampLight", BABYLON.Vector3.Zero(), new BABYLON.Vector3(0.25, -1, 0), lignts * Math.PI, 0.01, scene);
-
                   lampLight.diffuse = BABYLON.Color3.White();
                   lampLight.parent = scene.getMeshByName("bulb");
 
@@ -353,85 +349,92 @@
       }
     }
     fountain_setting(scene) {
-      if( scene != undefined ) {
-        BABYLON.SceneLoader.ImportMeshAsync("", "", "fountain.babylon").then(() =>  {
+      // 噴水作成
+      switch(true) {
+        case scene != undefined:
+          BABYLON.SceneLoader.ImportMeshAsync("", "", "fountain.babylon").then(() =>  {
 
-          const fountain = scene.getMeshByName("fountain");
-          fountain.position.x = -27.7;
-          fountain.position.y = 2.3;
-          fountain.position.z = 6.8;
+            const fountain = scene.getMeshByName("fountain");
+            fountain.position.x = -27.7;
+            fountain.position.y = 2.3;
+            fountain.position.z = 6.8;
 
-          let particleSystem = new BABYLON.ParticleSystem("particles", 5000, scene);
+            let particleSystem = new BABYLON.ParticleSystem("particles", 5000, scene);
 
-          particleSystem.particleTexture = new BABYLON.Texture("textures/flare/flare.png", scene);
+            particleSystem.particleTexture = new BABYLON.Texture("textures/flare/flare.png", scene);
 
-          particleSystem.emitter = new BABYLON.Vector3(-27.7, 6.3, 6.8);
-          particleSystem.minEmitBox = new BABYLON.Vector3(0, 0, 0);
-          particleSystem.maxEmitBox = new BABYLON.Vector3(0, 0, 0);
+            particleSystem.emitter = new BABYLON.Vector3(-27.7, 6.3, 6.8);
+            particleSystem.minEmitBox = new BABYLON.Vector3(0, 0, 0);
+            particleSystem.maxEmitBox = new BABYLON.Vector3(0, 0, 0);
 
-          particleSystem.color1 = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
-          particleSystem.color2 = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
-          particleSystem.colorDead = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
+            particleSystem.color1 = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
+            particleSystem.color2 = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
+            particleSystem.colorDead = new BABYLON.Color4(0.1, 0.1, 0.2, 0.8);
 
-          // パーティクルのサイズ
-          particleSystem.minSize = 0.1 / 2;
-          particleSystem.maxSize = 0.8 / 2;
+            particleSystem.minSize = 0.1 / 2;
+            particleSystem.maxSize = 0.8 / 2;
 
-          particleSystem.minLifeTime = 1;
-          particleSystem.maxLifeTime = 2.5;
+            particleSystem.minLifeTime = 1;
+            particleSystem.maxLifeTime = 2.5;
 
-          particleSystem.emitRate = 1500;
+            particleSystem.emitRate = 1500;
 
-          particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+            particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
 
-          particleSystem.gravity = new BABYLON.Vector3(0, -3.81, 0);
+            particleSystem.gravity = new BABYLON.Vector3(0, -3.81, 0);
 
-          // 噴水のばら撒く距離
-          particleSystem.direction1 = new BABYLON.Vector3(-.2, 1, .2);
-          particleSystem.direction2 = new BABYLON.Vector3(.2, 1, -.2);
+            particleSystem.direction1 = new BABYLON.Vector3(-.2, 1, .2);
+            particleSystem.direction2 = new BABYLON.Vector3(.2, 1, -.2);
 
-          particleSystem.minAngularSpeed = 0;
-          particleSystem.maxAngularSpeed = Math.PI;
+            particleSystem.minAngularSpeed = 0;
+            particleSystem.maxAngularSpeed = Math.PI;
 
-          particleSystem.minEmitPower = 2;
-          particleSystem.maxEmitPower = 3;
-          particleSystem.updateSpeed = 0.025;
+            particleSystem.minEmitPower = 2;
+            particleSystem.maxEmitPower = 3;
+            particleSystem.updateSpeed = 0.025;
 
-          particleSystem.start();
-        });  
+            particleSystem.start();
+          });  
+          break;
+        default:
+          break;
       }    
     }
     createScene(degree, light_dark, engine, canvas) {
-      if( !( degree == undefined && light_dark == undefined ) ) {
+      // シーン作成
+      switch(true) {
+        case !( light_dark == undefined && degree == undefined ):  
+          const scene = new BABYLON.Scene(engine);
+          const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, Math.PI / 2.5, new BABYLON.Vector3(0, 0, 0));
+          camera.position = new BABYLON.Vector3(30, 30, 30);
+          camera.attachControl(canvas, true);
 
-        const scene = new BABYLON.Scene(engine);
-        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, Math.PI / 2.5, new BABYLON.Vector3(0, 0, 0));
-        camera.position = new BABYLON.Vector3(30, 30, 30);
-        camera.attachControl(canvas, true);
+          // 光源設定
+          this.pointerLight(light_dark, scene);
 
-        // 光源設定
-        this.pointerLight(light_dark, scene);
+          // 空・グランド・水を作成
+          this.sky_ground_water_setting(light_dark, this.degree, scene);
 
-        // 空・グランド・水を作成
-        this.sky_ground_water_setting(light_dark, this.degree, scene);
+          // ティー作成
+          this.tea_setting(scene);
 
-        // ティー作成
-        this.tea_setting(scene);
+          // カップを作成
+          this.cup_setting(this.degree, scene);
 
-        // カップを作成
-        this.cup_setting(this.degree, scene);
+          // 木を作成
+          this.tree_setting(light_dark, scene);
+              
+          // ランプを作成
+          this.lump_setting(light_dark, scene, 0, 2, -20);
 
-        // 木を作成
-        this.tree_setting(light_dark, scene);
-            
-        // ランプを作成
-        this.lump_setting(light_dark, scene, 0, 2, -20);
+          // 噴水を作成
+          this.fountain_setting(scene);
 
-        // 噴水を作成
-        this.fountain_setting(scene);
-
-        return scene;
-      }
+          return scene;
+          break;
+        default:
+          break;   
+      }     
     };
   }
   new LightDarkmode();
