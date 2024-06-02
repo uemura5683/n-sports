@@ -71,6 +71,7 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
     constructor() {
       this.degree();
       this.bannerlist();
+      this.createScene();
       this.mainbanner();
     }
     degree(degrees) {
@@ -85,63 +86,10 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
       }
     }
     bannerlist() {
+      // バナーリストを表示
       const canvasblog = document.getElementById('renderCanvasList');
       const engine = new BABYLON.Engine(canvasblog);  
-
-      const createScene = function (degree, mainbanner) {
-
-        // シーンを作成
-        const scene = new BABYLON.Scene(engine);
-        scene.clearColor = new BABYLON.Color4(0,0,0,0); 
-
-        // カメラを作成
-        const camera = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 20, BABYLON.Vector3.Zero(), scene);
-        camera.attachControl(canvasblog, true);
-        camera.useAutoRotationBehavior = true;
-        camera.autoRotationBehavior.idleRotationSpeed = Math.PI * 10 / 180;  
-
-        // ライトを作成
-        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
-        light.diffuse = new BABYLON.Color3(1, 1, 1);
-        light.specular = new BABYLON.Color3(1, 1, 1);
-        light.groundColor = new BABYLON.Color3(1, 1, 1);
-
-        // ギャラリーリストを作成
-        const canvaslist = canvasblog.dataset.blog;
-        const canvaslistsplit = canvaslist.split(',');
-        canvaslistsplit.forEach(function( value, index ) {
-          const boxMat = new BABYLON.StandardMaterial("boxMat");
-          const value_split = value.split('|');
-
-          // 比率を計算する
-          const hfix =  ( ( canvaslistsplit.length / 2.5 ) * value_split[2] ) / value_split[1];
-          const wfix =  canvaslistsplit.length / 2.5;
-
-          const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
-          box.rotation.y = degree( index * ( 360 / canvaslistsplit.length ) );
-
-          box.position.x = - ( canvaslistsplit.length / 1.2 * Math.sin( degree( index * ( 360 / canvaslistsplit.length ) ) ) );
-          box.position.y = 0;
-          box.position.z = - ( canvaslistsplit.length / 1.2 * Math.cos( degree( index * ( 360 / canvaslistsplit.length ) ) ) );
-
-          //　テクスチャをはる
-          boxMat.diffuseTexture = new BABYLON.Texture(value_split[0]);
-          box.material = boxMat;
-
-          // クリックイベントを作る
-          box.actionManager = new BABYLON.ActionManager(scene);
-          box.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnDoublePickTrigger, function () {
-            const target = canvaslistsplit[index];
-            const target_split = target.split('|');
-            document.getElementById('renderCanvasList').classList.add('tw-hidden');
-            document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
-            document.querySelector('.close_button').classList.remove('tw-hidden');
-            mainbanner(target_split[0], target_split[1], target_split[2]);
-          }));
-        });
-        return scene;
-      }
-      const scene = createScene(this.degree, this.mainbanner);
+      const scene = this.createScene(this.degree, this.mainbanner, engine, canvasblog);
       engine.runRenderLoop(() => {
         scene.render();
       });
@@ -149,73 +97,141 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
         engine.resize();
       });
     }
-    mainbanner(src, width, height) {
-      // バナーレンダリング
-      function bnrrenderfunction() {
+    createScene(degree, mainbanner, engine, canvasblog) {
+      // シーンを作成
+      switch(true) {
+        case !( mainbanner == undefined && degree == undefined ):   
+            // シーンを作成
+            const scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color4(0,0,0,0); 
 
-        const canvasbanner = document.getElementById('renderCanvasBanner');
-        const engine = new BABYLON.Engine(canvasbanner);  
+            // カメラを作成
+            const camera = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 20, BABYLON.Vector3.Zero(), scene);
+            camera.attachControl(canvasblog, true);
+            camera.useAutoRotationBehavior = true;
+            camera.autoRotationBehavior.idleRotationSpeed = Math.PI * 10 / 180;  
 
-        const createScene = function () {
+            // ライトを作成
+            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+            light.diffuse = new BABYLON.Color3(1, 1, 1);
+            light.specular = new BABYLON.Color3(1, 1, 1);
+            light.groundColor = new BABYLON.Color3(1, 1, 1);
 
-          // シーンを作成
-          const scene = new BABYLON.Scene(engine);
-          scene.clearColor = new BABYLON.Color4(0,0,0,0); 
+            // ギャラリーリストを作成
+            const canvaslist = canvasblog.dataset.blog;
+            const canvaslistsplit = canvaslist.split(',');
+            canvaslistsplit.forEach(function( value, index ) {
+              const boxMat = new BABYLON.StandardMaterial("boxMat");
+              const value_split = value.split('|');
 
-          // カメラを作成
-          const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2,  Math.PI / 2, 18, BABYLON.Vector3.Zero(), scene);
-          camera.attachControl(canvasbanner, true);
+              // 比率を計算する
+              const hfix =  ( ( canvaslistsplit.length / 2.5 ) * value_split[2] ) / value_split[1];
+              const wfix =  canvaslistsplit.length / 2.5;
 
-          // ライトを作成
-          const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
-          light.diffuse = new BABYLON.Color3(1, 1, 1);
-          light.specular = new BABYLON.Color3(1, 1, 1);
-          light.groundColor = new BABYLON.Color3(1, 1, 1);      
+              const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
+              box.rotation.y = degree( index * ( 360 / canvaslistsplit.length ) );
 
-          // ブロックを作成
-          // マテリアルをセットする
-          const boxMat = new BABYLON.StandardMaterial("boxMat");
+              box.position.x = - ( canvaslistsplit.length / 1.2 * Math.sin( degree( index * ( 360 / canvaslistsplit.length ) ) ) );
+              box.position.y = 0;
+              box.position.z = - ( canvaslistsplit.length / 1.2 * Math.cos( degree( index * ( 360 / canvaslistsplit.length ) ) ) );
 
-          // ボックス型のジオメトリをセットする
-          switch(true) {
-            case String(width).length === 5 || String(height).length === 5:
-              var wfix = width / 1000;
-              var hfix = height / 1000;
-              break;          
-            case String(width).length === 4 || String(height).length === 4:
-              var wfix = width / 100;
-              var hfix = height / 100;
-              break;
-            case String(width).length === 3 || String(height).length === 3:
-              var wfix = width / 10;
-              var hfix = height / 10;            
-              break;
-            default:
-              var wfix = width;
-              var hfix = height;
-              break;  
-          }
-          const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
-
-          // テクスチャをセットする
-          if( src !== null ) {
-              boxMat.diffuseTexture = new BABYLON.Texture(src);
+              //　テクスチャをはる
+              boxMat.diffuseTexture = new BABYLON.Texture(value_split[0]);
               box.material = boxMat;
-              return scene;
-          }
-        };
 
-        const scene = createScene();
-        
-        engine.runRenderLoop(() => {
-          scene.render();
-        });
-        
-        window.addEventListener('resize', () => {
-          engine.resize();
-        });
+              // クリックイベントを作る
+              box.actionManager = new BABYLON.ActionManager(scene);
+              box.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnDoublePickTrigger, function () {
+                const target = canvaslistsplit[index];
+                const target_split = target.split('|');
+                document.getElementById('renderCanvasList').classList.add('tw-hidden');
+                document.getElementById('renderCanvasBanner').classList.remove('tw-hidden');
+                document.querySelector('.close_button').classList.remove('tw-hidden');
+                mainbanner(target_split[0], target_split[1], target_split[2]);
+              }));
+            });
+            return scene;
+          break;
+        default:
+          break;
       }
-      bnrrenderfunction();
+    }
+    mainbanner(src, width, height) {
+
+      // バナーレンダリング
+      const canvasbanner = document.getElementById('renderCanvasBanner');
+      const engine = new BABYLON.Engine(canvasbanner);  
+
+      const detailScenes = function () {
+
+        // シーンを作成
+        const scene = new BABYLON.Scene(engine);
+        scene.clearColor = new BABYLON.Color4(0,0,0,0); 
+
+        // カメラを作成
+        const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2,  Math.PI / 2, 18, BABYLON.Vector3.Zero(), scene);
+        camera.attachControl(canvasbanner, true);
+
+        // ライトを作成
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+        light.diffuse = new BABYLON.Color3(1, 1, 1);
+        light.specular = new BABYLON.Color3(1, 1, 1);
+        light.groundColor = new BABYLON.Color3(1, 1, 1);      
+
+        // ブロックを作成
+        // マテリアルをセットする
+        const boxMat = new BABYLON.StandardMaterial("boxMat");
+
+        // ボックス型のジオメトリをセットする
+        switch(true) {
+          case String(width).length === 5 || String(height).length === 5:
+            var wfix = width / 1000;
+            var hfix = height / 1000;
+            break;          
+          case String(width).length === 4 || String(height).length === 4:
+            var wfix = width / 100;
+            var hfix = height / 100;
+            break;
+          case String(width).length === 3 || String(height).length === 3:
+            var wfix = width / 10;
+            var hfix = height / 10;            
+            break;
+          default:
+            var wfix = width;
+            var hfix = height;
+            break;  
+        }
+
+        // SP・PC判定処理
+        switch(true) {
+          case window.matchMedia('(max-width:780px)').matches:
+            const spwfix = window.innerWidth;
+            const sphfix = (window.innerWidth * hfix ) / wfix;
+            wfix = spwfix / 50;
+            hfix = sphfix / 50;
+            break;
+          default:
+            break;            
+        }
+        const box = BABYLON.MeshBuilder.CreatePlane("box", {height: hfix, width: wfix, sideOrientation: BABYLON.Mesh.DOUBLESIDE});
+
+        // テクスチャをセットする
+        if( src !== null ) {
+            boxMat.diffuseTexture = new BABYLON.Texture(src);
+            box.material = boxMat;
+            return scene;
+        }
+      };
+      
+      const scene = detailScenes();
+      
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      
+      window.addEventListener('resize', () => {
+        engine.resize();
+      });
     }
   }
   const carousel = new Carousel();
