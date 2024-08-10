@@ -1,7 +1,7 @@
 ---
 import { getNsports } from "../../library/microcms";
 import Svg from '../components/Svg.astro';
-const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] } );
+const resnsports = await getNsports( { fields: ["id", "title", "image", "date"] } );
 ---
 
 <div class="tw-relative">
@@ -11,7 +11,7 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
   <canvas
     id="renderCanvasList"
     class="tw-fixed tw-w-[100%] tw-h-[100%] tw-top-[0px] tw-left-[0px]"
-    data-blog={resnublog.contents.map((content: any) => content.image.url + '|' + content.image.width + '|' + content.image.height  + '|' + content.title)}
+    data-sports={resnsports.contents.map((content: any) => content.image.url + '|' + content.image.width + '|' + content.image.height  + '|' + content.title)}
   >
   </canvas> 
   <canvas
@@ -87,9 +87,9 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
     }
     bannerlist() {
       // バナーリストを表示
-      const canvasblog = document.getElementById('renderCanvasList');
-      const engine = new BABYLON.Engine(canvasblog);  
-      const scene = this.createScene(this.degree, this.mainbanner, engine, canvasblog);
+      const canvassports = document.getElementById('renderCanvasList');
+      const engine = new BABYLON.Engine(canvassports);  
+      const scene = this.createScene(this.degree, this.mainbanner, engine, canvassports);
       engine.runRenderLoop(() => {
         scene.render();
       });
@@ -97,7 +97,7 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
         engine.resize();
       });
     }
-    createScene(degree, mainbanner, engine, canvasblog) {
+    createScene(degree, mainbanner, engine, canvassports) {
       // シーンを作成
       switch(true) {
         case !( mainbanner == undefined && degree == undefined ):   
@@ -107,7 +107,7 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
 
             // カメラを作成
             const camera = new BABYLON.ArcRotateCamera("camera2", -Math.PI / 2,  Math.PI / 2, 20, BABYLON.Vector3.Zero(), scene);
-            camera.attachControl(canvasblog, true);
+            camera.attachControl(canvassports, true);
             camera.useAutoRotationBehavior = true;
             camera.autoRotationBehavior.idleRotationSpeed = Math.PI * 10 / 180;  
 
@@ -118,7 +118,7 @@ const resnublog = await getNsports( { fields: ["id", "title", "image", "date"] }
             light.groundColor = new BABYLON.Color3(1, 1, 1);
 
             // ギャラリーリストを作成
-            const canvaslist = canvasblog.dataset.blog;
+            const canvaslist = canvassports.dataset.sports;
             const canvaslistsplit = canvaslist.split(',');
             canvaslistsplit.forEach(function( value, index ) {
               const boxMat = new BABYLON.StandardMaterial("boxMat");

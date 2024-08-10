@@ -7,7 +7,7 @@ const nu_client = createClient({
 });
 
 // 型定義
-export type Blog = {
+export type Nsports = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -17,14 +17,14 @@ export type Blog = {
   content: string;
 };
 
-export type BlogResponse = {
+export type NsportsResponse = {
   totalCount: number;
   offset: number;
   limit: number;
-  contents: Blog[];
+  contents: Nsports[];
 };
 
 // n-sportsの呼び出し
 export const getNsports = async (queries?: MicroCMSQueries) => {
-  return await nu_client.get<BlogResponse>({ endpoint: "golf", queries: { limit: 99 } });
+  return await nu_client.get<NsportsResponse>({ endpoint: "golf", queries: { limit: 99 } });
 };
