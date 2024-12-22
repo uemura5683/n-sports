@@ -39,8 +39,8 @@ const resnsports = await getNsports( { fields: ["id", "title", "image", "date"] 
               document.getElementById('background_switch').classList.add('tw-filter-drow-shadow');
               document.getElementById('renderCanvasList').classList.add('tw-pointer-events-none');
               document.getElementById('renderCanvasBanner').classList.add('tw-pointer-events-none');
-              document.getElementById('renderCanvasList').classList.add('tw-opacity-70');
-              document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-70');
+              document.getElementById('renderCanvasList').classList.add('tw-opacity-50');
+              document.getElementById('renderCanvasBanner').classList.add('!tw-opacity-50');
               break;
             default:
               document.getElementById('caoucel_switch').classList.remove('tw-opacity-50')
@@ -48,9 +48,9 @@ const resnsports = await getNsports( { fields: ["id", "title", "image", "date"] 
               document.getElementById('background_switch').classList.add('tw-opacity-50')
               document.getElementById('background_switch').classList.remove('tw-filter-drow-shadow');
               document.getElementById('renderCanvasList').classList.remove('tw-pointer-events-none');
-              document.getElementById('renderCanvasList').classList.remove('tw-opacity-70');
+              document.getElementById('renderCanvasList').classList.remove('tw-opacity-50');
               document.getElementById('renderCanvasBanner').classList.remove('tw-pointer-events-none');
-              document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-70');
+              document.getElementById('renderCanvasBanner').classList.remove('!tw-opacity-50');
               break;
           }      
           break;
